@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="HANA_ExisteConfAPI" xml:space="preserve">
+    <value>SELECT * FROM "@EXX_SIRE_APIS" WHERE "Code" = '{0}'</value>
+  </data>
+  <data name="HANA_ListarEmpresas" xml:space="preserve">
+    <value>SELECT 
+	"Code", 
+	"U_EXX_RUC" || ' ' ||
+	(CASE WHEN "Code" = '0' THEN (SELECT "CompnyName" FROM OADM)
+		  ELSE (SELECT "BPLName" FROM OBPL A WHERE A."BPLId" = T0."Code") END)AS "Empresa" 
+FROM "@EXX_SIRE_APIS" T0 
+ORDER BY TO_INTEGER(T0."Code")</value>
+  </data>
+  <data name="HANA_ListarSetup" xml:space="preserve">
+    <value>SELECT 
+    "Code",
+    "Name",
+    IFNULL("U_EXX_ADDN", '')   AS "U_EXX_ADDN",
+    IFNULL("U_EXX_VERS", '')   AS "U_EXX_VERS",
+    IFNULL("U_EXX_RUTA", '')   AS "U_EXX_RUTA"
+FROM "@EXX_SETUP";</value>
+  </data>
+  <data name="HANA_MultiBranch" xml:space="preserve">
+    <value>SELECT COUNT(*) FROM "OBPL"</value>
+  </data>
+  <data name="HANA_ObtenerConfiguracion" xml:space="preserve">
+    <value>SELECT 
+    "Code",
+    IFNULL("U_EXX_CONS", '')   AS "U_EXX_CONS",
+    IFNULL("U_EXX_URSL", '')   AS "U_EXX_URSL",
+    IFNULL("U_EXX_VSAP", '')   AS "U_EXX_VSAP",
+    IFNULL("U_EXX_VSIR", '')   AS "U_EXX_VSIR"
+FROM "@EXX_SIRE_CONF"
+WHERE "Code" = '01';</value>
+  </data>
+  <data name="HANA_ObtieneConfAPIxOADM" xml:space="preserve">
+    <value>SELECT 
+	'0' AS "BPLId",
+	T0."TaxIdNum" AS "GlblLocNum",
+	T0."CompnyName" AS "BPLName",
+	IFNULL(T1."U_EXX_APIS", '') AS "U_EXX_APIS",
+	IFNULL(T1."U_EXX_USER", '') AS "U_EXX_USER",
+	IFNULL(T1."U_EXX_PASS", '') AS "U_EXX_PASS",
+	IFNULL(T1."U_EXX_CLID", '') AS "U_EXX_CLID",
+	IFNULL(T1."U_EXX_CLSE", '') AS "U_EXX_CLSE"
+FROM OADM T0
+LEFT JOIN "@EXX_SIRE_APIS" T1 ON T1."Code" = '0'
+ORDER BY 1</value>
+  </data>
+  <data name="HANA_ObtieneConfAPIxSucursal" xml:space="preserve">
+    <value>SELECT 
+	T0."BPLId",
+	T0."GlblLocNum",
+	T0."BPLName",
+	IFNULL(T1."U_EXX_APIS", '') AS "U_EXX_APIS",
+	IFNULL(T1."U_EXX_USER", '') AS "U_EXX_USER",
+	IFNULL(T1."U_EXX_PASS", '') AS "U_EXX_PASS",
+	IFNULL(T1."U_EXX_CLID", '') AS "U_EXX_CLID",
+	IFNULL(T1."U_EXX_CLSE", '') AS "U_EXX_CLSE"
+FROM OBPL T0
+LEFT JOIN "@EXX_SIRE_APIS" T1 ON T0."BPLId" = T1."Code"
+ORDER BY 1</value>
+  </data>
+  <data name="HANA_ObtieneLlavesDocumentos" xml:space="preserve">
+    <value>SELECT T0."ObjType", T0."DocEntry" 
+FROM OPCH T0
+INNER JOIN OCRD T1 ON T0."CardCode" = T1."CardCode"
+WHERE IFNULL(T0."BPLId", 0) = {0} AND T1."LicTradNum" = '{1}' AND T0."Indicator" = '{2}' AND T0."NumAtCard" = '{3}-{4}' 
+UNION ALL
+SELECT T0."ObjType", T0."DocEntry" 
+FROM ODPO T0
+INNER JOIN OCRD T1 ON T0."CardCode" = T1."CardCode"
+WHERE IFNULL(T0."BPLId", 0) = {0} AND T1."LicTradNum" = '{1}' AND T0."Indicator" = '{2}' AND T0."NumAtCard" = '{3}-{4}' 
+UNION ALL
+SELECT T0."ObjType", T0."DocEntry" 
+FROM ORPC T0
+INNER JOIN OCRD T1 ON T0."CardCode" = T1."CardCode"
+WHERE IFNULL(T0."BPLId", 0) = {0} AND T1."LicTradNum" = '{1}' AND T0."Indicator" = '{2}' AND T0."NumAtCard" = '{3}-{4}'</value>
+  </data>
+  <data name="HANA_ValidaExisteRegistroCompra" xml:space="preserve">
+    <value>SELECT * FROM "@EXX_SIRE_COMP" WHERE "U_EXX_PERIODO" = '{0}' AND "U_EXX_BPLID" = '{1}'</value>
+  </data>
+  <data name="HANA_ValidarTabla" xml:space="preserve">
+    <value>SELECT TABLE_NAME
+FROM SYS.M_TABLES
+WHERE SCHEMA_NAME = '{0}'
+AND TABLE_NAME = '{1}';</value>
+  </data>
+  <data name="SQL_ExisteConfAPI" xml:space="preserve">
+    <value>SELECT * FROM [@EXX_SIRE_APIS] WHERE Code = '{0}'</value>
+  </data>
+  <data name="SQL_ListarEmpresas" xml:space="preserve">
+    <value>SELECT 
+	Code, 
+	U_EXX_RUC + ' ' +
+	(CASE WHEN Code = '0' THEN (SELECT CompnyName FROM OADM)
+		  ELSE (SELECT BPLName FROM OBPL A WHERE A."BPLId" = T0."Code") END)AS Empresa 
+FROM [@EXX_SIRE_APIS] T0 
+ORDER BY CAST(T0.Code AS INT)</value>
+  </data>
+  <data name="SQL_ListarSetup" xml:space="preserve">
+    <value>SELECT 
+    Code,
+    Name
+    ISNULL(U_EXX_ADDN, '')    AS U_EXX_ADDN,
+    ISNULL(U_EXX_VERS, '')    AS U_EXX_VERS,
+    ISNULL(U_EXX_RUTA, '')    AS U_EXX_RUTA
+FROM [@EXX_SETUP];</value>
+  </data>
+  <data name="SQL_MultiBranch" xml:space="preserve">
+    <value>SELECT COUNT(*) FROM [OBPL]</value>
+  </data>
+  <data name="SQL_ObtenerConfiguracion" xml:space="preserve">
+    <value>SELECT 
+    Code,
+    ISNULL(U_EXX_CONS, '')    AS U_EXX_CONS,
+    ISNULL(U_EXX_URSL, '')    AS U_EXX_URSL,
+    ISNULL(U_EXX_VSAP, '')    AS U_EXX_VSAP,
+    ISNULL(U_EXX_VSIR, '')    AS U_EXX_VSIR
+FROM [@EXX_SIRE_CONF]
+WHERE Code, = '01';</value>
+  </data>
+  <data name="SQL_ObtieneConfAPIxOADM" xml:space="preserve">
+    <value>SELECT 
+	'0' AS BPLId,
+	T0.TaxIdNum AS GlblLocNum,
+	T0.CompnyName AS BPLName,
+	ISNULL(T1.U_EXX_APIS, '') AS U_EXX_APIS,
+	ISNULL(T1.U_EXX_USER, '') AS U_EXX_USER,
+	ISNULL(T1.U_EXX_PASS, '') AS U_EXX_PASS,
+	ISNULL(T1.U_EXX_CLID, '') AS U_EXX_CLID,
+	ISNULL(T1.U_EXX_CLSE, '') AS U_EXX_CLSE
+FROM [OADM] T0
+LEFT JOIN [@EXX_SIRE_APIS] T1 ON T1.Code = '0'
+ORDER BY 1</value>
+  </data>
+  <data name="SQL_ObtieneConfAPIxSucursal" xml:space="preserve">
+    <value>SELECT 
+	T0.BPLId,
+	T0.GlblLocNum,
+	T0.BPLName,
+	ISNULL(T1.U_EXX_APIS, '') AS U_EXX_APIS,
+	ISNULL(T1.U_EXX_USER, '') AS U_EXX_USER,
+	ISNULL(T1.U_EXX_PASS, '') AS U_EXX_PASS,
+	ISNULL(T1.U_EXX_CLID, '') AS U_EXX_CLID,
+	ISNULL(T1.U_EXX_CLSE, '') AS U_EXX_CLSE
+FROM [OBPL] T0
+LEFT JOIN [@EXX_SIRE_APIS] T1 ON T0.BPLId = T1.Code
+ORDER BY 1</value>
+  </data>
+  <data name="SQL_ObtieneLlavesDocumentos" xml:space="preserve">
+    <value>SELECT T0."ObjType", T0."DocEntry" 
+FROM OPCH T0
+INNER JOIN OCRD T1 ON T0."CardCode" = T1."CardCode"
+WHERE IFNULL(T0."BPLId", 0) = {0} AND T1."LicTradNum" = '{1}' AND T0."Indicator" = '{2}' AND T0."NumAtCard" = '{3}-{4}' 
+UNION ALL
+SELECT T0."ObjType", T0."DocEntry" 
+FROM ODPO T0
+INNER JOIN OCRD T1 ON T0."CardCode" = T1."CardCode"
+WHERE IFNULL(T0."BPLId", 0) = {0} AND T1."LicTradNum" = '{1}' AND T0."Indicator" = '{2}' AND T0."NumAtCard" = '{3}-{4}' 
+UNION ALL
+SELECT T0."ObjType", T0."DocEntry" 
+FROM ORPC T0
+INNER JOIN OCRD T1 ON T0."CardCode" = T1."CardCode"
+WHERE IFNULL(T0."BPLId", 0) = {0} AND T1."LicTradNum" = '{1}' AND T0."Indicator" = '{2}' AND T0."NumAtCard" = '{3}-{4}'</value>
+  </data>
+  <data name="SQL_ValidaExisteRegistroCompra" xml:space="preserve">
+    <value>SELECT * FROM [@EXX_SIRE_COMP] WHERE U_EXX_PERIODO = '{0}' AND U_EXX_BPLID = '{1}'</value>
+  </data>
+  <data name="SQL_ValidarTabla" xml:space="preserve">
+    <value>SELECT TABLE_NAME
+FROM SYS.M_TABLES
+WHERE SCHEMA_NAME = '{0}'
+AND TABLE_NAME = '{1}';</value>
+  </data>
+</root>

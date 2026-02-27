@@ -1,0 +1,17 @@
+﻿[
+  {
+    "TableName": "EXX_SIRE_CONF",
+    "TableDescription": "EXX - CONFIGURACION SIRE",
+    "TableType": "bott_NoObject"
+  },
+  {
+    "TableName": "EXX_SIRE_APIS",
+    "TableDescription": "EXX - CONFIGURACION APIS",
+    "TableType": "bott_NoObject"
+  },
+  {
+    "TableName": "EXX_SETUP",
+    "TableDescription": "Setup de AddOns de EXXIS",
+    "TableType": "bott_NoObject"
+  }
+]

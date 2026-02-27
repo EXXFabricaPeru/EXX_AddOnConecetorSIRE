@@ -1,0 +1,178 @@
+﻿[
+  {
+    "TableName": "@EXX_SIRE_CONF",
+    "Name": "EXX_CONS",
+    "Description": "Tipo Conexion SAP",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 1,
+    "DefaultValue": "1",
+    "Mandatory": "tYES",
+    "ValidValuesMD": [
+      {
+        "Value": "1",
+        "Description": "SDK"
+      },
+      {
+        "Value": "2",
+        "Description": "Service Layer"
+      }
+    ]
+  },
+  {
+    "TableName": "@EXX_SIRE_CONF",
+    "Name": "EXX_URSL",
+    "Description": "URL Service Layer",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 254,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_CONF",
+    "Name": "EXX_VSAP",
+    "Description": "Valida Compras SAP",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 1,
+    "DefaultValue": "1",
+    "Mandatory": "tYES",
+    "ValidValuesMD": [
+      {
+        "Value": "1",
+        "Description": "TXT"
+      },
+      {
+        "Value": "2",
+        "Description": "PROCEDIMIENTO"
+      }
+    ]
+  },
+  {
+    "TableName": "@EXX_SIRE_CONF",
+    "Name": "EXX_VSIR",
+    "Description": "Valida Compras SIRE",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 1,
+    "DefaultValue": "1",
+    "Mandatory": "tYES",
+    "ValidValuesMD": [
+      {
+        "Value": "1",
+        "Description": "TXT"
+      },
+      {
+        "Value": "2",
+        "Description": "API SIRE"
+      }
+    ]
+  },
+  {
+    "TableName": "@EXX_SIRE_APIS",
+    "Name": "EXX_RUC",
+    "Description": "RUC Empresa",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 15,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_APIS",
+    "Name": "EXX_APIS",
+    "Description": "URL API SIRE",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 254,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_APIS",
+    "Name": "EXX_USER",
+    "Description": "Usuario SOL",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 100,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_APIS",
+    "Name": "EXX_PASS",
+    "Description": "Clave SOL",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 100,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_APIS",
+    "Name": "EXX_CLID",
+    "Description": "Client Id",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 150,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_APIS",
+    "Name": "EXX_CLSE",
+    "Description": "Client Secret",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 150,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SETUP",
+    "Name": "EXX_ADDN",
+    "Description": "Nombre del AddOn",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "LinkedSystemObject": null,
+    "LinkedUDO": null,
+    "LinkedTable": null,
+    "EditSize": 100,
+    "DefaultValue": null,
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SETUP",
+    "Name": "EXX_VERS",
+    "Description": "Version del AddOn",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "LinkedSystemObject": null,
+    "LinkedUDO": null,
+    "LinkedTable": null,
+    "EditSize": 100,
+    "DefaultValue": null,
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SETUP",
+    "Name": "EXX_RUTA",
+    "Description": "Ruta auxiliar para AddOn",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "LinkedSystemObject": null,
+    "LinkedUDO": null,
+    "LinkedTable": null,
+    "EditSize": 254,
+    "DefaultValue": null,
+    "ValidValuesMD": []
+  }
+]

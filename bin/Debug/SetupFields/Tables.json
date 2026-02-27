@@ -1,0 +1,12 @@
+﻿[
+  {
+    "TableName": "EXX_SIRE_COMP",
+    "TableDescription": "EXX - SIRE COMPRAS",
+    "TableType": "bott_Document"
+  },
+  {
+    "TableName": "EXX_SIRE_COMP1",
+    "TableDescription": "EXX - SIRE COMPRAS CP",
+    "TableType": "bott_DocumentLines"
+  }
+]
