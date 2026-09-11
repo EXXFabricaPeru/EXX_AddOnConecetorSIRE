@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="HANA_ConsultaExisteLog" xml:space="preserve">
+    <value>SELECT TOP 1 "Code", "U_EXX_DATE", "U_EXX_HORA", "U_EXX_ARCHTXT", "U_EXX_CONTENIDO" FROM "@EXX_SIRE_SERV"
+WHERE "U_EXX_TIPO" = {0} AND "U_EXX_BPLID" = '{1}' AND "U_EXX_PERIODO" = '{2}' AND "U_EXX_ESTADO" = 0 ORDER BY "Code" DESC</value>
+  </data>
   <data name="HANA_ExisteConfAPI" xml:space="preserve">
     <value>SELECT * FROM "@EXX_SIRE_APIS" WHERE "Code" = '{0}'</value>
   </data>
@@ -179,30 +183,178 @@ FROM OBPL T0
 LEFT JOIN "@EXX_SIRE_APIS" T1 ON T0."BPLId" = T1."Code"
 ORDER BY 1</value>
   </data>
-  <data name="HANA_ObtieneLlavesDocumentos" xml:space="preserve">
-    <value>SELECT T0."ObjType", T0."DocEntry" 
+  <data name="HANA_ObtieneLlavesDocumentosCompra" xml:space="preserve">
+    <value>SELECT T0."ObjType", T0."DocEntry"
 FROM OPCH T0
 INNER JOIN OCRD T1 ON T0."CardCode" = T1."CardCode"
-WHERE IFNULL(T0."BPLId", 0) = {0} AND T1."LicTradNum" = '{1}' AND T0."Indicator" = '{2}' AND T0."NumAtCard" = '{3}-{4}' 
+WHERE IFNULL(T0."BPLId", 0) = {0}
+AND T1."LicTradNum" = '{1}'
+AND T0."Indicator" = '{2}'
+AND LOCATE(T0."NumAtCard", '-') &gt; 0
+AND SUBSTRING(T0."NumAtCard", 1, LOCATE(T0."NumAtCard", '-') - 1) = '{3}'
+AND LTRIM(SUBSTRING(T0."NumAtCard", LOCATE(T0."NumAtCard", '-') + 1),'0') = LTRIM('{4}','0')
+
 UNION ALL
-SELECT T0."ObjType", T0."DocEntry" 
+
+SELECT T0."ObjType", T0."DocEntry"
 FROM ODPO T0
 INNER JOIN OCRD T1 ON T0."CardCode" = T1."CardCode"
-WHERE IFNULL(T0."BPLId", 0) = {0} AND T1."LicTradNum" = '{1}' AND T0."Indicator" = '{2}' AND T0."NumAtCard" = '{3}-{4}' 
+WHERE IFNULL(T0."BPLId", 0) = {0}
+AND T1."LicTradNum" = '{1}'
+AND T0."Indicator" = '{2}'
+AND LOCATE(T0."NumAtCard", '-') &gt; 0
+AND SUBSTRING(T0."NumAtCard", 1, LOCATE(T0."NumAtCard", '-') - 1) = '{3}'
+AND LTRIM(SUBSTRING(T0."NumAtCard", LOCATE(T0."NumAtCard", '-') + 1),'0') = LTRIM('{4}','0')
+
 UNION ALL
-SELECT T0."ObjType", T0."DocEntry" 
+
+SELECT T0."ObjType", T0."DocEntry"
 FROM ORPC T0
 INNER JOIN OCRD T1 ON T0."CardCode" = T1."CardCode"
-WHERE IFNULL(T0."BPLId", 0) = {0} AND T1."LicTradNum" = '{1}' AND T0."Indicator" = '{2}' AND T0."NumAtCard" = '{3}-{4}'</value>
+WHERE IFNULL(T0."BPLId", 0) = {0}
+AND T1."LicTradNum" = '{1}'
+AND T0."Indicator" = '{2}'
+AND LOCATE(T0."NumAtCard", '-') &gt; 0
+AND SUBSTRING(T0."NumAtCard", 1, LOCATE(T0."NumAtCard", '-') - 1) = '{3}'
+AND LTRIM(SUBSTRING(T0."NumAtCard", LOCATE(T0."NumAtCard", '-') + 1),'0') = LTRIM('{4}','0')</value>
+  </data>
+  <data name="HANA_ObtieneLlavesDocumentosVenta" xml:space="preserve">
+    <value>SELECT top 10 T0."ObjType", T0."DocEntry"
+FROM OINV T0
+INNER JOIN OCRD T1 ON T0."CardCode" = T1."CardCode"
+INNER JOIN NNM1 T2 ON T0."Series" = T2."Series"
+WHERE IFNULL(T0."BPLId", 0) = {0}
+AND T1."LicTradNum" = '{1}'
+AND T0."Indicator" = '{2}'
+AND (T0."FolioPref" = '{3}' OR T2."SeriesName" = '{3}')
+AND T0."FolioNum" = LTRIM('{4}','0')
+
+UNION ALL
+
+SELECT T0."ObjType", T0."DocEntry"
+FROM ODPI T0
+INNER JOIN OCRD T1 ON T0."CardCode" = T1."CardCode"
+INNER JOIN NNM1 T2 ON T0."Series" = T2."Series"
+WHERE IFNULL(T0."BPLId", 0) = {0}
+AND T1."LicTradNum" = '{1}'
+AND T0."Indicator" = '{2}'
+AND (T0."FolioPref" = '{3}' OR T2."SeriesName" = '{3}')
+AND T0."FolioNum" = LTRIM('{4}','0')
+
+UNION ALL
+
+SELECT T0."ObjType", T0."DocEntry"
+FROM ORIN T0
+INNER JOIN OCRD T1 ON T0."CardCode" = T1."CardCode"
+INNER JOIN NNM1 T2 ON T0."Series" = T2."Series"
+WHERE IFNULL(T0."BPLId", 0) = {0}
+AND T1."LicTradNum" = '{1}'
+AND T0."Indicator" = '{2}'
+AND (T0."FolioPref" = '{3}' OR T2."SeriesName" = '{3}')
+AND T0."FolioNum" = LTRIM('{4}','0')</value>
+  </data>
+  <data name="HANA_SBO_EXX_SIRE_ASISTENTE_MASIVO" xml:space="preserve">
+    <value>CREATE PROCEDURE "SBO_EXX_SIRE_ASISTENTE_MASIVO" (
+	IN TIPO VARCHAR (1) 
+	, IN PROCESO VARCHAR (1)
+	, IN PERIODO VARCHAR (1) 
+) 
+AS
+BEGIN
+
+	IF :TIPO = 'C' THEN
+		IF :PROCESO = '-' THEN
+			SELECT 
+			(CASE WHEN IFNULL(T2."DocEntry", 0) = 0 THEN 'N' ELSE 'Y' END) AS "Sel",
+			T0."Code" AS "BPLId",
+			T1."GlblLocNum",
+			T1."BPLName" AS "BPLName",
+			T0."U_EXX_APIS",
+			T0."U_EXX_USER",
+			T0."U_EXX_PASS",
+			T0."U_EXX_CLID",
+			T0."U_EXX_CLSE",
+			IFNULL(T2."DocEntry", 0) "DocEntry"
+			FROM "@EXX_SIRE_APIS" T0
+			INNER JOIN "OBPL" T1 ON T0."Code" = T1."BPLId"
+			LEFT JOIN "@EXX_SIRE_COMP" T2 ON T0."Code" = T2."U_EXX_BPLID" AND IFNULL(T2."Canceled", 'N') = 'N' AND T2."U_EXX_PERIODO" = :PERIODO
+		 	WHERE IFNULL(T0."U_EXX_APIS", '') &lt;&gt; '' AND IFNULL(T0."U_EXX_USER", '') &lt;&gt; '' AND IFNULL(T0."U_EXX_PASS", '') &lt;&gt; '' 
+		 	AND IFNULL(T0."U_EXX_CLID", '') &lt;&gt; '' AND IFNULL(T0."U_EXX_CLSE", '') &lt;&gt; '';
+		ELSE
+		
+			SELECT 
+			(CASE WHEN IFNULL(T2."DocEntry", 0) = 0 THEN 'N' ELSE 'Y' END) AS "Sel",
+			T0."Code" AS "BPLId",
+			T1."GlblLocNum",
+			T1."BPLName" AS "BPLName",
+			T0."U_EXX_APIS",
+			T0."U_EXX_USER",
+			T0."U_EXX_PASS",
+			T0."U_EXX_CLID",
+			T0."U_EXX_CLSE",
+			IFNULL(T2."DocEntry", 0) "DocEntry"
+			FROM "@EXX_SIRE_APIS" T0
+			INNER JOIN "OBPL" T1 ON T0."Code" = T1."BPLId"
+			LEFT JOIN "@EXX_SIRE_COMP" T2 ON T0."Code" = T2."U_EXX_BPLID" AND IFNULL(T2."Canceled", 'N') = 'N' AND T2."U_EXX_PERIODO" = :PERIODO
+		 	WHERE IFNULL(T0."U_EXX_APIS", '') &lt;&gt; '' AND IFNULL(T0."U_EXX_USER", '') &lt;&gt; '' AND IFNULL(T0."U_EXX_PASS", '') &lt;&gt; '' 
+		 	AND IFNULL(T0."U_EXX_CLID", '') &lt;&gt; '' AND IFNULL(T0."U_EXX_CLSE", '') &lt;&gt; '' AND T2."U_EXX_ESTADO" = :PROCESO;
+		END IF;
+	
+	ELSEIF :TIPO = 'V' THEN
+		IF :PROCESO = '-' THEN
+			SELECT 
+			(CASE WHEN IFNULL(T2."DocEntry", 0) = 0 THEN 'N' ELSE 'Y' END) AS "Sel",
+			T0."Code" AS "BPLId",
+			T1."GlblLocNum",
+			T1."BPLName" AS "BPLName",
+			T0."U_EXX_APIS",
+			T0."U_EXX_USER",
+			T0."U_EXX_PASS",
+			T0."U_EXX_CLID",
+			T0."U_EXX_CLSE",
+			IFNULL(T2."DocEntry", 0) "DocEntry"
+			FROM "@EXX_SIRE_APIS" T0
+			INNER JOIN "OBPL" T1 ON T0."Code" = T1."BPLId"
+			LEFT JOIN "@EXX_SIRE_VENT" T2 ON T0."Code" = T2."U_EXX_BPLID" AND IFNULL(T2."Canceled", 'N') = 'N' AND T2."U_EXX_PERIODO" = :PERIODO
+		 	WHERE IFNULL(T0."U_EXX_APIS", '') &lt;&gt; '' AND IFNULL(T0."U_EXX_USER", '') &lt;&gt; '' AND IFNULL(T0."U_EXX_PASS", '') &lt;&gt; '' 
+		 	AND IFNULL(T0."U_EXX_CLID", '') &lt;&gt; '' AND IFNULL(T0."U_EXX_CLSE", '') &lt;&gt; '';
+		
+		ELSE
+			SELECT 
+			(CASE WHEN IFNULL(T2."DocEntry", 0) = 0 THEN 'N' ELSE 'Y' END) AS "Sel",
+			T0."Code" AS "BPLId",
+			T1."GlblLocNum",
+			T1."BPLName" AS "BPLName",
+			T0."U_EXX_APIS",
+			T0."U_EXX_USER",
+			T0."U_EXX_PASS",
+			T0."U_EXX_CLID",
+			T0."U_EXX_CLSE",
+			IFNULL(T2."DocEntry", 0) "DocEntry"
+			FROM "@EXX_SIRE_APIS" T0
+			INNER JOIN "OBPL" T1 ON T0."Code" = T1."BPLId"
+			LEFT JOIN "@EXX_SIRE_VENT" T2 ON T0."Code" = T2."U_EXX_BPLID" AND IFNULL(T2."Canceled", 'N') = 'N' AND T2."U_EXX_PERIODO" = :PERIODO
+		 	WHERE IFNULL(T0."U_EXX_APIS", '') &lt;&gt; '' AND IFNULL(T0."U_EXX_USER", '') &lt;&gt; '' AND IFNULL(T0."U_EXX_PASS", '') &lt;&gt; '' 
+		 	AND IFNULL(T0."U_EXX_CLID", '') &lt;&gt; '' AND IFNULL(T0."U_EXX_CLSE", '') &lt;&gt; '' AND T2."U_EXX_ESTADO" = :PROCESO;
+		END IF;
+	END IF;
+END;</value>
   </data>
   <data name="HANA_ValidaExisteRegistroCompra" xml:space="preserve">
-    <value>SELECT * FROM "@EXX_SIRE_COMP" WHERE "U_EXX_PERIODO" = '{0}' AND "U_EXX_BPLID" = '{1}'</value>
+    <value>SELECT * FROM "@EXX_SIRE_COMP" WHERE "U_EXX_PERIODO" = '{0}' AND "U_EXX_BPLID" = '{1}' AND IFNULL("Canceled", '') = 'N'</value>
+  </data>
+  <data name="HANA_ValidaExisteRegistroVenta" xml:space="preserve">
+    <value>SELECT * FROM "@EXX_SIRE_VENT" WHERE "U_EXX_PERIODO" = '{0}' AND "U_EXX_BPLID" = '{1}' AND IFNULL("Canceled", '') = 'N'</value>
   </data>
   <data name="HANA_ValidarTabla" xml:space="preserve">
     <value>SELECT TABLE_NAME
 FROM SYS.M_TABLES
 WHERE SCHEMA_NAME = '{0}'
 AND TABLE_NAME = '{1}';</value>
+  </data>
+  <data name="SQL_ConsultaExisteLog" xml:space="preserve">
+    <value>SELECT TOP 1 Code, U_EXX_DATE, U_EXX_HORA, U_EXX_ARCHTXT, U_EXX_CONTENIDO FROM [@EXX_SIRE_SERV]
+WHERE U_EXX_TIPO = {0} AND U_EXX_BPLID = '{1}' AND U_EXX_PERIODO = '{2}' AND U_EXX_ESTADO =0 ORDER BY Code DESC</value>
   </data>
   <data name="SQL_ExisteConfAPI" xml:space="preserve">
     <value>SELECT * FROM [@EXX_SIRE_APIS] WHERE Code = '{0}'</value>
@@ -219,11 +371,11 @@ ORDER BY CAST(T0.Code AS INT)</value>
   <data name="SQL_ListarSetup" xml:space="preserve">
     <value>SELECT 
     Code,
-    Name
+    Name,
     ISNULL(U_EXX_ADDN, '')    AS U_EXX_ADDN,
     ISNULL(U_EXX_VERS, '')    AS U_EXX_VERS,
     ISNULL(U_EXX_RUTA, '')    AS U_EXX_RUTA
-FROM [@EXX_SETUP];</value>
+FROM [@EXX_SETUP]</value>
   </data>
   <data name="SQL_MultiBranch" xml:space="preserve">
     <value>SELECT COUNT(*) FROM [OBPL]</value>
@@ -236,7 +388,7 @@ FROM [@EXX_SETUP];</value>
     ISNULL(U_EXX_VSAP, '')    AS U_EXX_VSAP,
     ISNULL(U_EXX_VSIR, '')    AS U_EXX_VSIR
 FROM [@EXX_SIRE_CONF]
-WHERE Code, = '01';</value>
+WHERE Code = '01'</value>
   </data>
   <data name="SQL_ObtieneConfAPIxOADM" xml:space="preserve">
     <value>SELECT 
@@ -266,29 +418,212 @@ FROM [OBPL] T0
 LEFT JOIN [@EXX_SIRE_APIS] T1 ON T0.BPLId = T1.Code
 ORDER BY 1</value>
   </data>
-  <data name="SQL_ObtieneLlavesDocumentos" xml:space="preserve">
-    <value>SELECT T0."ObjType", T0."DocEntry" 
+  <data name="SQL_ObtieneLlavesDocumentosCompra" xml:space="preserve">
+    <value>SELECT T0."ObjType", T0."DocEntry"
 FROM OPCH T0
 INNER JOIN OCRD T1 ON T0."CardCode" = T1."CardCode"
-WHERE IFNULL(T0."BPLId", 0) = {0} AND T1."LicTradNum" = '{1}' AND T0."Indicator" = '{2}' AND T0."NumAtCard" = '{3}-{4}' 
+WHERE ISNULL(T0."BPLId", 0) = {0}
+AND T1."LicTradNum" = '{1}'
+AND T0."Indicator" = '{2}'
+AND CHARINDEX('-', T0."NumAtCard") &gt; 0
+AND LEFT(T0."NumAtCard", CHARINDEX('-', T0."NumAtCard") - 1) = '{3}'
+AND SUBSTRING(
+        SUBSTRING(T0."NumAtCard", CHARINDEX('-', T0."NumAtCard") + 1, LEN(T0."NumAtCard")),
+        PATINDEX('%[^0]%', SUBSTRING(T0."NumAtCard", CHARINDEX('-', T0."NumAtCard") + 1, LEN(T0."NumAtCard")) + '0'),
+        LEN(T0."NumAtCard")
+    ) = '{4}'
+
 UNION ALL
-SELECT T0."ObjType", T0."DocEntry" 
+
+SELECT T0."ObjType", T0."DocEntry"
 FROM ODPO T0
 INNER JOIN OCRD T1 ON T0."CardCode" = T1."CardCode"
-WHERE IFNULL(T0."BPLId", 0) = {0} AND T1."LicTradNum" = '{1}' AND T0."Indicator" = '{2}' AND T0."NumAtCard" = '{3}-{4}' 
+WHERE ISNULL(T0."BPLId", 0) = {0}
+AND T1."LicTradNum" = '{1}'
+AND T0."Indicator" = '{2}'
+AND CHARINDEX('-', T0."NumAtCard") &gt; 0
+AND LEFT(T0."NumAtCard", CHARINDEX('-', T0."NumAtCard") - 1) = '{3}'
+AND SUBSTRING(
+        SUBSTRING(T0."NumAtCard", CHARINDEX('-', T0."NumAtCard") + 1, LEN(T0."NumAtCard")),
+        PATINDEX('%[^0]%', SUBSTRING(T0."NumAtCard", CHARINDEX('-', T0."NumAtCard") + 1, LEN(T0."NumAtCard")) + '0'),
+        LEN(T0."NumAtCard")
+    ) = '{4}'
+
 UNION ALL
-SELECT T0."ObjType", T0."DocEntry" 
+
+SELECT T0."ObjType", T0."DocEntry"
 FROM ORPC T0
 INNER JOIN OCRD T1 ON T0."CardCode" = T1."CardCode"
-WHERE IFNULL(T0."BPLId", 0) = {0} AND T1."LicTradNum" = '{1}' AND T0."Indicator" = '{2}' AND T0."NumAtCard" = '{3}-{4}'</value>
+WHERE ISNULL(T0."BPLId", 0) = {0}
+AND T1."LicTradNum" = '{1}'
+AND T0."Indicator" = '{2}'
+AND CHARINDEX('-', T0."NumAtCard") &gt; 0
+AND LEFT(T0."NumAtCard", CHARINDEX('-', T0."NumAtCard") - 1) = '{3}'
+AND SUBSTRING(
+        SUBSTRING(T0."NumAtCard", CHARINDEX('-', T0."NumAtCard") + 1, LEN(T0."NumAtCard")),
+        PATINDEX('%[^0]%', SUBSTRING(T0."NumAtCard", CHARINDEX('-', T0."NumAtCard") + 1, LEN(T0."NumAtCard")) + '0'),
+        LEN(T0."NumAtCard")
+    ) = '{4}'</value>
+  </data>
+  <data name="SQL_ObtieneLlavesDocumentosVenta" xml:space="preserve">
+    <value>SELECT T0."ObjType", T0."DocEntry"
+FROM OINV T0
+INNER JOIN OCRD T1 ON T0."CardCode" = T1."CardCode"
+INNER JOIN NNM1 T2 ON T0."Series" = T2."Series"
+WHERE ISNULL(T0."BPLId", 0) = {0}
+AND T1."LicTradNum" = '{1}'
+AND T0."Indicator" = '{2}'
+AND (T0."FolioPref" = '{3}' OR T2."SeriesName" = '{3}')
+AND T0."FolioNum" = LTRIM('{4}','0')
+
+
+UNION ALL
+
+SELECT T0."ObjType", T0."DocEntry"
+FROM ODPI T0
+INNER JOIN OCRD T1 ON T0."CardCode" = T1."CardCode"
+INNER JOIN NNM1 T2 ON T0."Series" = T2."Series"
+WHERE ISNULL(T0."BPLId", 0) = {0}
+AND T1."LicTradNum" = '{1}'
+AND T0."Indicator" = '{2}'
+AND (T0."FolioPref" = '{3}' OR T2."SeriesName" = '{3}')
+AND T0."FolioNum" = LTRIM('{4}','0')
+
+
+UNION ALL
+
+SELECT T0."ObjType", T0."DocEntry"
+FROM ORIN T0
+INNER JOIN OCRD T1 ON T0."CardCode" = T1."CardCode"
+INNER JOIN NNM1 T2 ON T0."Series" = T2."Series"
+WHERE ISNULL(T0."BPLId", 0) = {0}
+AND T1."LicTradNum" = '{1}'
+AND T0."Indicator" = '{2}'
+AND (T0."FolioPref" = '{3}' OR T2."SeriesName" = '{3}')
+AND T0."FolioNum" = LTRIM('{4}','0')</value>
+  </data>
+  <data name="SQL_SBO_EXX_SIRE_ASISTENTE_MASIVO" xml:space="preserve">
+    <value>CREATE PROCEDURE SBO_EXX_SIRE_ASISTENTE_MASIVO
+    @TIPO VARCHAR(1),
+    @PROCESO VARCHAR(1),
+    @PERIODO VARCHAR(1)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Cuando tipo es C (Compras)
+    IF @TIPO = 'C'
+    BEGIN
+        -- Cuando proceso es '-'
+        IF @PROCESO = '-'
+        BEGIN
+            SELECT 
+                (CASE WHEN ISNULL(CAST(T2.DocEntry AS VARCHAR(50)), '') = '' THEN 'N' ELSE 'Y' END) AS Sel,
+                T0.Code AS BPLId,
+                T1.GlblLocNum,
+                T1.BPLName AS BPLName,
+                T0.U_EXX_APIS,
+                T0.U_EXX_USER,
+                T0.U_EXX_PASS,
+                T0.U_EXX_CLID,
+                T0.U_EXX_CLSE,
+                ISNULL(CAST(T2.DocEntry AS VARCHAR(50)), '') AS DocEntry
+            FROM [@EXX_SIRE_APIS] T0
+            INNER JOIN OBPL T1 ON T0.Code = T1.BPLId
+            LEFT JOIN [@EXX_SIRE_COMP] T2 ON T0.Code = T2.U_EXX_BPLID AND ISNULL(T2.Canceled, 'N') = 'N' AND T2.U_EXX_PERIODO = @PERIODO
+            WHERE ISNULL(T0.U_EXX_APIS, '') &lt;&gt; '' 
+              AND ISNULL(T0.U_EXX_USER, '') &lt;&gt; '' 
+              AND ISNULL(T0.U_EXX_PASS, '') &lt;&gt; '' 
+              AND ISNULL(T0.U_EXX_CLID, '') &lt;&gt; '' 
+              AND ISNULL(T0.U_EXX_CLSE, '') &lt;&gt; '';
+        END
+        -- Cuando proceso es distinto de '-' (p. ej. '0')
+        ELSE
+        BEGIN
+            SELECT 
+                (CASE WHEN ISNULL(CAST(T2.DocEntry AS VARCHAR(50)), '') = '' THEN 'N' ELSE 'Y' END) AS Sel,
+                T0.Code AS BPLId,
+                T1.GlblLocNum,
+                T1.BPLName AS BPLName,
+                T0.U_EXX_APIS,
+                T0.U_EXX_USER,
+                T0.U_EXX_PASS,
+                T0.U_EXX_CLID,
+                T0.U_EXX_CLSE,
+                ISNULL(CAST(T2.DocEntry AS VARCHAR(50)), '') AS DocEntry
+            FROM [@EXX_SIRE_APIS] T0
+            INNER JOIN OBPL T1 ON T0.Code = T1.BPLId
+            LEFT JOIN [@EXX_SIRE_COMP] T2 ON T0.Code = T2.U_EXX_BPLID AND ISNULL(T2.Canceled, 'N') = 'N' AND T2.U_EXX_PERIODO = @PERIODO
+            WHERE ISNULL(T0.U_EXX_APIS, '') &lt;&gt; '' 
+              AND ISNULL(T0.U_EXX_USER, '') &lt;&gt; '' 
+              AND ISNULL(T0.U_EXX_PASS, '') &lt;&gt; '' 
+              AND ISNULL(T0.U_EXX_CLID, '') &lt;&gt; '' 
+              AND ISNULL(T0.U_EXX_CLSE, '') &lt;&gt; '' 
+              AND T2.U_EXX_ESTADO = @PROCESO;
+        END
+    END
+    -- Cuando tipo es V (Ventas)
+    ELSE IF @TIPO = 'V'
+    BEGIN
+        -- Cuando proceso es '-'
+        IF @PROCESO = '-'
+        BEGIN
+            SELECT 
+                (CASE WHEN ISNULL(CAST(T2.DocEntry AS VARCHAR(50)), '') = '' THEN 'N' ELSE 'Y' END) AS Sel,
+                T0.Code AS BPLId,
+                T1.GlblLocNum,
+                T1.BPLName AS BPLName,
+                T0.U_EXX_APIS,
+                T0.U_EXX_USER,
+                T0.U_EXX_PASS,
+                T0.U_EXX_CLID,
+                T0.U_EXX_CLSE,
+                ISNULL(CAST(T2.DocEntry AS VARCHAR(50)), '') AS DocEntry
+            FROM [@EXX_SIRE_APIS] T0
+            INNER JOIN OBPL T1 ON T0.Code = T1.BPLId
+            LEFT JOIN [@EXX_SIRE_VENT] T2 ON T0.Code = T2.U_EXX_BPLID AND ISNULL(T2.Canceled, 'N') = 'N' AND T2.U_EXX_PERIODO = @PERIODO
+            WHERE ISNULL(T0.U_EXX_APIS, '') &lt;&gt; '' 
+              AND ISNULL(T0.U_EXX_USER, '') &lt;&gt; '' 
+              AND ISNULL(T0.U_EXX_PASS, '') &lt;&gt; '' 
+              AND ISNULL(T0.U_EXX_CLID, '') &lt;&gt; '' 
+              AND ISNULL(T0.U_EXX_CLSE, '') &lt;&gt; '';
+        END
+        -- Cuando proceso es distinto de '-' (p. ej. '0')
+        ELSE
+        BEGIN
+            SELECT 
+                (CASE WHEN ISNULL(CAST(T2.DocEntry AS VARCHAR(50)), '') = '' THEN 'N' ELSE 'Y' END) AS Sel,
+                T0.Code AS BPLId,
+                T1.GlblLocNum,
+                T1.BPLName AS BPLName,
+                T0.U_EXX_APIS,
+                T0.U_EXX_USER,
+                T0.U_EXX_PASS,
+                T0.U_EXX_CLID,
+                T0.U_EXX_CLSE,
+                ISNULL(CAST(T2.DocEntry AS VARCHAR(50)), '') AS DocEntry
+            FROM [@EXX_SIRE_APIS] T0
+            INNER JOIN OBPL T1 ON T0.Code = T1.BPLId
+            LEFT JOIN [@EXX_SIRE_VENT] T2 ON T0.Code = T2.U_EXX_BPLID AND ISNULL(T2.Canceled, 'N') = 'N' AND T2.U_EXX_PERIODO = @PERIODO
+            WHERE ISNULL(T0.U_EXX_APIS, '') &lt;&gt; '' 
+              AND ISNULL(T0.U_EXX_USER, '') &lt;&gt; '' 
+              AND ISNULL(T0.U_EXX_PASS, '') &lt;&gt; '' 
+              AND ISNULL(T0.U_EXX_CLID, '') &lt;&gt; '' 
+              AND ISNULL(T0.U_EXX_CLSE, '') &lt;&gt; '' 
+              AND T2.U_EXX_ESTADO = @PROCESO;
+        END
+    END
+END;</value>
   </data>
   <data name="SQL_ValidaExisteRegistroCompra" xml:space="preserve">
-    <value>SELECT * FROM [@EXX_SIRE_COMP] WHERE U_EXX_PERIODO = '{0}' AND U_EXX_BPLID = '{1}'</value>
+    <value>SELECT * FROM [@EXX_SIRE_COMP] WHERE U_EXX_PERIODO = '{0}' AND U_EXX_BPLID = '{1}' AND ISNULL(Canceled, '') = 'N'</value>
+  </data>
+  <data name="SQL_ValidaExisteRegistroVenta" xml:space="preserve">
+    <value>SELECT * FROM [@EXX_SIRE_VENT] WHERE U_EXX_PERIODO = '{0}' AND U_EXX_BPLID = '{1}' AND ISNULL(Canceled, '') = 'N'</value>
   </data>
   <data name="SQL_ValidarTabla" xml:space="preserve">
-    <value>SELECT TABLE_NAME
-FROM SYS.M_TABLES
-WHERE SCHEMA_NAME = '{0}'
-AND TABLE_NAME = '{1}';</value>
+    <value>SELECT name
+FROM {0}.sys.tables
+WHERE name = '{1}'</value>
   </data>
 </root>

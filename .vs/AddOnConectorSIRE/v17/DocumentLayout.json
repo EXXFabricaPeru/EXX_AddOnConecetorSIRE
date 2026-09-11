@@ -1,42 +1,38 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\",
+  "WorkspaceRootPath": "C:\\EXX_DEV\\AddOnConectorSIRE\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\modules\\configuracion\\main.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|solutionrelative:modules\\configuracion\\main.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|c:\\exx_dev\\addonconectorsire\\addonconectorsire\\framework\\sapsl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|solutionrelative:framework\\sapsl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|c:\\exx_dev\\addonconectorsire\\addonconectorsire\\modules\\compras\\main.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|solutionrelative:modules\\compras\\main.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\app\\revalmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|C:\\EXX_DEV\\AddOnConectorSIRE\\app\\revalmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|solutionrelative:app\\revalmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\modules\\compras\\events.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|C:\\EXX_DEV\\AddOnConectorSIRE\\modules\\asistente\\main.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|solutionrelative:modules\\asistente\\main.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|C:\\EXX_DEV\\AddOnConectorSIRE\\modules\\asistente\\events.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|solutionrelative:modules\\asistente\\events.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|C:\\EXX_DEV\\AddOnConectorSIRE\\framework\\sireapi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|solutionrelative:framework\\sireapi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|C:\\EXX_DEV\\AddOnConectorSIRE\\modules\\compras\\events.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|solutionrelative:modules\\compras\\events.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\modules\\configuracion\\events.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|solutionrelative:modules\\configuracion\\events.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\app\\setup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|solutionrelative:app\\setup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\framework\\sapsdk.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|solutionrelative:framework\\sapsdk.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\app\\globals.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|c:\\exx_dev\\addonconectorsire\\app\\globals.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|solutionrelative:app\\globals.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|c:\\exx_dev\\addonconectorsire\\setupfields\\fields.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|solutionrelative:setupfields\\fields.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|C:\\EXX_DEV\\AddOnConectorSIRE\\app\\menu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B8E31877-A074-4719-B770-01B156E1842B}|AddOnConectorSIRE.csproj|solutionrelative:app\\menu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -46,124 +42,133 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 12,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "SAPSL.cs",
-              "DocumentMoniker": "C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\Framework\\SAPSL.cs",
-              "RelativeDocumentMoniker": "Framework\\SAPSL.cs",
-              "ToolTip": "C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\Framework\\SAPSL.cs",
-              "RelativeToolTip": "Framework\\SAPSL.cs",
-              "ViewState": "AQIAAAoAAAAAAAAAAAAAAAQBAAAJAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-27T04:02:15.528Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Main.cs",
-              "DocumentMoniker": "C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\Modules\\Compras\\Main.cs",
-              "RelativeDocumentMoniker": "Modules\\Compras\\Main.cs",
-              "ToolTip": "C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\Modules\\Compras\\Main.cs",
-              "RelativeToolTip": "Modules\\Compras\\Main.cs",
-              "ViewState": "AQIAABkAAAAAAAAAAAAjwCwAAAAQAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-24T18:24:53.954Z",
+              "DocumentIndex": 6,
+              "Title": "Fields.json",
+              "DocumentMoniker": "C:\\EXX_DEV\\AddOnConectorSIRE\\SetupFields\\Fields.json",
+              "RelativeDocumentMoniker": "SetupFields\\Fields.json",
+              "ToolTip": "C:\\EXX_DEV\\AddOnConectorSIRE\\SetupFields\\Fields.json",
+              "RelativeToolTip": "SetupFields\\Fields.json",
+              "ViewState": "AQIAAK0FAAAAAAAAAAAswL4FAAAyAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-09-10T15:41:50.473Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "SAPSDK.cs",
-              "DocumentMoniker": "C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\Framework\\SAPSDK.cs",
-              "RelativeDocumentMoniker": "Framework\\SAPSDK.cs",
-              "ToolTip": "C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\Framework\\SAPSDK.cs",
-              "RelativeToolTip": "Framework\\SAPSDK.cs",
-              "ViewState": "AQIAAHcBAAAAAAAAAAAWwIgBAAAJAAAA",
+              "Title": "Menu.cs",
+              "DocumentMoniker": "C:\\EXX_DEV\\AddOnConectorSIRE\\App\\Menu.cs",
+              "RelativeDocumentMoniker": "App\\Menu.cs",
+              "ToolTip": "C:\\EXX_DEV\\AddOnConectorSIRE\\App\\Menu.cs",
+              "RelativeToolTip": "App\\Menu.cs",
+              "ViewState": "AQIAABIAAAAAAAAAAAAswHcAAAAeAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-24T18:24:32.797Z"
+              "WhenOpened": "2026-08-27T17:17:50.143Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Setup.cs",
-              "DocumentMoniker": "C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\App\\Setup.cs",
-              "RelativeDocumentMoniker": "App\\Setup.cs",
-              "ToolTip": "C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\App\\Setup.cs",
-              "RelativeToolTip": "App\\Setup.cs",
-              "ViewState": "AQIAACgAAAAAAAAAAAAmwEEAAAAYAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-24T18:10:49.753Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 5,
               "Title": "Globals.cs",
-              "DocumentMoniker": "C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\App\\Globals.cs",
+              "DocumentMoniker": "C:\\EXX_DEV\\AddOnConectorSIRE\\App\\Globals.cs",
               "RelativeDocumentMoniker": "App\\Globals.cs",
-              "ToolTip": "C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\App\\Globals.cs",
+              "ToolTip": "C:\\EXX_DEV\\AddOnConectorSIRE\\App\\Globals.cs",
               "RelativeToolTip": "App\\Globals.cs",
-              "ViewState": "AQIAAI8AAAAAAAAAAAAIwJ4AAAAMAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAA0AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-24T18:10:16.55Z"
+              "WhenOpened": "2026-08-27T17:17:18.705Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Events.cs",
-              "DocumentMoniker": "C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\Modules\\Compras\\Events.cs",
-              "RelativeDocumentMoniker": "Modules\\Compras\\Events.cs",
-              "ToolTip": "C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\Modules\\Compras\\Events.cs",
-              "RelativeToolTip": "Modules\\Compras\\Events.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAqwBgAAAArAAAA",
+              "DocumentIndex": 1,
+              "Title": "Main.cs",
+              "DocumentMoniker": "C:\\EXX_DEV\\AddOnConectorSIRE\\Modules\\Asistente\\Main.cs",
+              "RelativeDocumentMoniker": "Modules\\Asistente\\Main.cs",
+              "ToolTip": "C:\\EXX_DEV\\AddOnConectorSIRE\\Modules\\Asistente\\Main.cs",
+              "RelativeToolTip": "Modules\\Asistente\\Main.cs",
+              "ViewState": "AQIAABwGAAAAAAAAAAAswCwGAAAkAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-20T11:19:59.691Z",
+              "WhenOpened": "2026-08-07T18:42:26.275Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "RevalMain.cs",
-              "DocumentMoniker": "C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\App\\RevalMain.cs",
-              "RelativeDocumentMoniker": "App\\RevalMain.cs",
-              "ToolTip": "C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\App\\RevalMain.cs",
-              "RelativeToolTip": "App\\RevalMain.cs",
-              "ViewState": "AQIAACgAAAAAAAAAAAAgwDgAAAA2AAAA",
+              "Title": "SIREAPI.cs",
+              "DocumentMoniker": "C:\\EXX_DEV\\AddOnConectorSIRE\\Framework\\SIREAPI.cs",
+              "RelativeDocumentMoniker": "Framework\\SIREAPI.cs",
+              "ToolTip": "C:\\EXX_DEV\\AddOnConectorSIRE\\Framework\\SIREAPI.cs",
+              "RelativeToolTip": "Framework\\SIREAPI.cs",
+              "ViewState": "AQIAAEsAAAAAAAAAAAAhwGsAAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-24T18:10:13.487Z",
+              "WhenOpened": "2026-08-11T20:15:28.653Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Events.cs",
+              "DocumentMoniker": "C:\\EXX_DEV\\AddOnConectorSIRE\\Modules\\Asistente\\Events.cs",
+              "RelativeDocumentMoniker": "Modules\\Asistente\\Events.cs",
+              "ToolTip": "C:\\EXX_DEV\\AddOnConectorSIRE\\Modules\\Asistente\\Events.cs",
+              "RelativeToolTip": "Modules\\Asistente\\Events.cs",
+              "ViewState": "AQIAACwAAAAAAAAAAAAnwEMAAABAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-07T18:44:34.795Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Main.cs",
-              "DocumentMoniker": "C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\Modules\\Configuracion\\Main.cs",
-              "RelativeDocumentMoniker": "Modules\\Configuracion\\Main.cs",
-              "ToolTip": "C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\Modules\\Configuracion\\Main.cs",
-              "RelativeToolTip": "Modules\\Configuracion\\Main.cs",
-              "ViewState": "AQIAACsAAAAAAAAAAAAjwF8AAABBAAAA",
+              "Title": "RevalMain.cs",
+              "DocumentMoniker": "C:\\EXX_DEV\\AddOnConectorSIRE\\App\\RevalMain.cs",
+              "RelativeDocumentMoniker": "App\\RevalMain.cs",
+              "ToolTip": "C:\\EXX_DEV\\AddOnConectorSIRE\\App\\RevalMain.cs",
+              "RelativeToolTip": "App\\RevalMain.cs",
+              "ViewState": "AQIAAIgAAAAAAAAAAADgv5sAAAA5AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-20T08:47:31.417Z",
+              "WhenOpened": "2026-07-31T20:01:31.28Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 4,
               "Title": "Events.cs",
-              "DocumentMoniker": "C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\Modules\\Configuracion\\Events.cs",
-              "RelativeDocumentMoniker": "Modules\\Configuracion\\Events.cs",
-              "ToolTip": "C:\\EXX_DEV\\AddOnConectorSIRE\\AddOnConectorSIRE\\Modules\\Configuracion\\Events.cs",
-              "RelativeToolTip": "Modules\\Configuracion\\Events.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAmAAAA",
+              "DocumentMoniker": "C:\\EXX_DEV\\AddOnConectorSIRE\\Modules\\Compras\\Events.cs",
+              "RelativeDocumentMoniker": "Modules\\Compras\\Events.cs",
+              "ToolTip": "C:\\EXX_DEV\\AddOnConectorSIRE\\Modules\\Compras\\Events.cs",
+              "RelativeToolTip": "Modules\\Compras\\Events.cs",
+              "ViewState": "AQIAAB4AAAAAAAAAAAASwC8AAAAQAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-20T08:32:47.927Z",
+              "WhenOpened": "2026-07-31T19:49:03.233Z",
               "EditorCaption": ""
             }
           ]
@@ -172,6 +177,10 @@
           "DockedWidth": 200,
           "SelectedChildIndex": -1,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"

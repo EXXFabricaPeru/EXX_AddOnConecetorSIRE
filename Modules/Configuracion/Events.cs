@@ -1,9 +1,5 @@
 ﻿using SAPbouiCOM;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AddOnConectorSIRE.Modules.Configuracion
 {
@@ -22,6 +18,8 @@ namespace AddOnConectorSIRE.Modules.Configuracion
                             Main.GuardarConfig(pVal, oForm, out BubbleEvent); break;
                         case "2":
                             Main.CerrarFormulario(pVal, oForm, out BubbleEvent); break;
+                        case "3":
+                            Main.SetearPassword(pVal, oForm, out BubbleEvent); break;
                     }
                 }
 

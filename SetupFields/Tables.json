@@ -8,5 +8,20 @@
     "TableName": "EXX_SIRE_COMP1",
     "TableDescription": "EXX - SIRE COMPRAS CP",
     "TableType": "bott_DocumentLines"
+  },
+  {
+    "TableName": "EXX_SIRE_VENT",
+    "TableDescription": "EXX - SIRE VENTAS",
+    "TableType": "bott_Document"
+  },
+  {
+    "TableName": "EXX_SIRE_VENT1",
+    "TableDescription": "EXX - SIRE VENTAS CP",
+    "TableType": "bott_DocumentLines"
+  },
+  {
+    "TableName": "EXX_SIRE_SERV",
+    "TableDescription": "EXX - Servicio de Consulta Aut",
+    "TableType": "bott_NoObjectAutoIncrement"
   }
 ]

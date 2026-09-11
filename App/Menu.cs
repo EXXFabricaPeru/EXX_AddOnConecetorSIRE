@@ -97,6 +97,27 @@ namespace AddOnConectorSIRE
                     { }
                     #endregion
                     #endregion
+
+                    #region Registro Masivo
+                    if (Globals.isMultiBranch)
+                    {
+                        oCreationPackage.Type = SAPbouiCOM.BoMenuType.mt_STRING;
+                        oCreationPackage.UniqueID = "EXX_SIRE_ASIS";
+                        oCreationPackage.String = "EXX - Asistente masivo";
+                        #region ExisteMenu
+                        try
+                        {
+                            if (oMenus.Exists("EXX_SIRE_ASIS"))
+                            {
+                                Globals.SBO_Application.Menus.RemoveEx("EXX_SIRE_ASIS");
+                            }
+                            oMenus.AddEx(oCreationPackage);
+                        }
+                        catch (Exception)
+                        { }
+                        #endregion
+                    }
+                    #endregion
                 }
             }
             catch (Exception ex)

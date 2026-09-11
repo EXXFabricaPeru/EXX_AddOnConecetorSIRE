@@ -1,11 +1,5 @@
 ﻿using SAPbouiCOM;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AddOnConectorSIRE.Modules;
-using AddOnConectorSIRE.Framework;
 
 namespace AddOnConectorSIRE
 {
@@ -20,8 +14,9 @@ namespace AddOnConectorSIRE
                 Globals.SBO_Application.AppEvent += new _IApplicationEvents_AppEventEventHandler(SBO_Application_AppEvent);
                 Menu.LoadMenu();
                 Setup.CargarConfiguracion();
+                Globals.SetDecimalSeparator();
 
-                if (!Globals.existeConf)
+                if (Globals.existeConf)
                     Setup.ValidarVersion();
 
                 Menu.LoadMenu();
@@ -60,6 +55,9 @@ namespace AddOnConectorSIRE
                             Globals.LoadForm("EXX_SIRE_VENT");
                             oForm = Globals.SBO_Application.Forms.ActiveForm;
                             Modules.Ventas.Main.LoadForm(ref oForm);
+                            break;
+                        case "EXX_SIRE_ASIS":
+                            Modules.Asistente.Main.LoadForm();
                             break;
                         case "1281": //Buscar
                         case "1282": //Nuevo
@@ -138,12 +136,23 @@ namespace AddOnConectorSIRE
                                     break;
                             }
                             break;
+                        case "EXX_SIRE_ASIS":
+                            switch (pVal.EventType)
+                            {
+                                case BoEventTypes.et_ITEM_PRESSED:
+                                    Modules.Asistente.Events.ItemPressed(ref pVal, oForm, out BubbleEvent); break;
+                                case BoEventTypes.et_COMBO_SELECT:
+                                    Modules.Asistente.Events.ComboSelect(ref pVal, oForm, out BubbleEvent); break;
+                                case BoEventTypes.et_MATRIX_LINK_PRESSED:
+                                    Modules.Asistente.Events.MatrixLinkedPressed(ref pVal, oForm, out BubbleEvent); break;
+                            }
+                            break;
                     }
                 }
                 catch (Exception ex)
                 {
                     BubbleEvent = false;
-                    if (ex.Message != "Form - Invalid Form" && ex.Message != "Invalid Choose From List  [66000-104]")
+                    if (ex.Message != "Form - Invalid Form" && ex.Message != "Invalid Choose From List  [66000-104]" && !ex.Message.Contains("focus"))
                         Globals.ErrorMessage(ex.Message);
                 }
             }

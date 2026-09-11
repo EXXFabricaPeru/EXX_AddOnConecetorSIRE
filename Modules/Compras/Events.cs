@@ -1,9 +1,5 @@
 ﻿using SAPbouiCOM;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AddOnConectorSIRE.Modules.Compras
 {
@@ -25,6 +21,10 @@ namespace AddOnConectorSIRE.Modules.Compras
                             Main.SeleccionarArchivo(pVal, oForm, out BubbleEvent); break;
                         case "5":
                             Main.ProcesarRegistroCompra(pVal, oForm, out BubbleEvent); break;
+                        case "6":
+                            Main.ReemplazarPropuesta(pVal, oForm, out BubbleEvent); break;
+                        case "7":
+                            Main.ConsultaTicket(pVal, oForm, out BubbleEvent); break;
                         case "0_U_G":
                             Main.SeleccionarFila(pVal, oForm, out BubbleEvent); break;
                     }
@@ -35,7 +35,7 @@ namespace AddOnConectorSIRE.Modules.Compras
                     switch (pVal.ItemUID)
                     {
                         case "1":
-                            if (oForm.Mode == BoFormMode.fm_ADD_MODE || oForm.Mode == BoFormMode.fm_OK_MODE)
+                            if (oForm.Mode == BoFormMode.fm_ADD_MODE)
                                 Globals.SBO_Application.ActivateMenuItem("1289");
                             break;
                     }

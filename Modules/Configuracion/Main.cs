@@ -1,5 +1,6 @@
 ﻿using AddOnConectorSIRE.Entities;
 using AddOnConectorSIRE.Framework;
+using AddOnConectorSIRE.Utilities;
 using SAPbouiCOM;
 using System;
 using System.Collections.Generic;
@@ -37,7 +38,7 @@ namespace AddOnConectorSIRE.Modules.Configuracion
                 oForm.Left = centerX;
                 oForm.Top = centerY;
 
-                SAPbouiCOM.Grid oGrid = (SAPbouiCOM.Grid)oForm.Items.Item("gEmpresas").Specific;
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("mEmpresas").Specific;
                 SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("DT_0");
                 SAPbouiCOM.Folder oFolder = (SAPbouiCOM.Folder)oForm.Items.Item("Item_1").Specific;
                 oFolder.Select();
@@ -45,31 +46,33 @@ namespace AddOnConectorSIRE.Modules.Configuracion
                 if (Globals.IsHana())
                 {
                     if (Globals.isMultiBranch) Globals.Query = Properties.Resources.HANA_ObtieneConfAPIxSucursal;
-                    else Globals.Query = Properties.Resources.HANA_MultiBranch;
+                    else Globals.Query = Properties.Resources.HANA_ObtieneConfAPIxOADM;
                 }
                 else
                 {
                     if (Globals.isMultiBranch) Globals.Query = Properties.Resources.SQL_ObtieneConfAPIxSucursal;
-                    else Globals.Query = Properties.Resources.SQL_MultiBranch;
+                    else Globals.Query = Properties.Resources.SQL_ObtieneConfAPIxOADM;
                 }
+
                 oDataTable.ExecuteQuery(Globals.Query);
-                oGrid.Columns.Item("BPLId").Editable = false;
-                oGrid.Columns.Item("BPLId").TitleObject.Caption = "Sucursal";
-                oGrid.Columns.Item("GlblLocNum").Editable = false;
-                oGrid.Columns.Item("GlblLocNum").TitleObject.Caption = "RUC";
-                oGrid.Columns.Item("BPLName").Editable = false;
-                oGrid.Columns.Item("BPLName").TitleObject.Caption = "Nombre Empresa";
-                oGrid.Columns.Item("U_EXX_APIS").Editable = true;
-                oGrid.Columns.Item("U_EXX_APIS").TitleObject.Caption = "URL API";
-                oGrid.Columns.Item("U_EXX_USER").Editable = true;
-                oGrid.Columns.Item("U_EXX_USER").TitleObject.Caption = "Usuario SOL";
-                oGrid.Columns.Item("U_EXX_PASS").Editable = true;
-                oGrid.Columns.Item("U_EXX_PASS").TitleObject.Caption = "Clave SOL";
-                oGrid.Columns.Item("U_EXX_CLID").Editable = true;
-                oGrid.Columns.Item("U_EXX_CLID").TitleObject.Caption = "Client ID";
-                oGrid.Columns.Item("U_EXX_CLSE").Editable = true;
-                oGrid.Columns.Item("U_EXX_CLSE").TitleObject.Caption = "Client Secret";
-                oGrid.AutoResizeColumns();
+                oMatrix.Columns.Item("BPLId").DataBind.Bind("DT_0", "BPLId");
+                oMatrix.Columns.Item("GlblLocNum").DataBind.Bind("DT_0", "GlblLocNum");
+                oMatrix.Columns.Item("BPLName").DataBind.Bind("DT_0", "BPLName");
+                oMatrix.Columns.Item("U_EXX_APIS").DataBind.Bind("DT_0", "U_EXX_APIS");
+                oMatrix.Columns.Item("U_EXX_USER").DataBind.Bind("DT_0", "U_EXX_USER");
+                oMatrix.Columns.Item("U_EXX_PASS").DataBind.Bind("DT_0", "U_EXX_PASS");
+                oMatrix.Columns.Item("U_EXX_CLID").DataBind.Bind("DT_0", "U_EXX_CLID");
+                oMatrix.Columns.Item("BPLId").DataBind.Bind("DT_0", "BPLId");
+                oMatrix.Columns.Item("U_EXX_CLSE").DataBind.Bind("DT_0", "U_EXX_CLSE");
+                oMatrix.LoadFromDataSource();
+
+                for (int i = 1; i <= oMatrix.RowCount; i++)
+                {
+                    SAPbouiCOM.EditText celda = ((SAPbouiCOM.EditText)oMatrix.Columns.Item("U_EXX_PASS").Cells.Item(i).Specific);
+                    celda.IsPassword = true;
+                }
+
+                oMatrix.AutoResizeColumns();
                 if (Globals.existeConf)
                 {
                     if (Globals.IsHana())
@@ -84,21 +87,11 @@ namespace AddOnConectorSIRE.Modules.Configuracion
                     ((SAPbouiCOM.ComboBox)oForm.Items.Item("cbValSAP").Specific).Select(Globals.CONF.UEXXVSAP, BoSearchKey.psk_ByValue);
                     ((SAPbouiCOM.ComboBox)oForm.Items.Item("cbValSIRE").Specific).Select(Globals.CONF.UEXXVSIR, BoSearchKey.psk_ByValue);
                     ((SAPbouiCOM.EditText)oForm.Items.Item("etSL").Specific).Value = Globals.CONF.UEXXURSL;
-                    //((SAPbouiCOM.EditText)oForm.Items.Item("etAPI").Specific).Value = Globals.CONF.UEXXAPIS;
-                    //((SAPbouiCOM.EditText)oForm.Items.Item("etUser").Specific).Value = Globals.CONF.UEXXUSER;
-                    //((SAPbouiCOM.EditText)oForm.Items.Item("etPass").Specific).Value = Globals.CONF.UEXXPASS;
-                    //((SAPbouiCOM.EditText)oForm.Items.Item("etClient").Specific).Value = Globals.CONF.UEXXCLID;
-                    //((SAPbouiCOM.EditText)oForm.Items.Item("etSecret").Specific).Value = Globals.CONF.UEXXCLSE;
                     Modules.Configuracion.Main.ValidaConfig(Globals.CONF);
                 }
                 else
                 {
                     ((SAPbouiCOM.EditText)oForm.Items.Item("etSL").Specific).Value = string.Empty;
-                    //((SAPbouiCOM.EditText)oForm.Items.Item("etAPI").Specific).Value = string.Empty;
-                    //((SAPbouiCOM.EditText)oForm.Items.Item("etUser").Specific).Value = string.Empty;
-                    //((SAPbouiCOM.EditText)oForm.Items.Item("etPass").Specific).Value = string.Empty;
-                    //((SAPbouiCOM.EditText)oForm.Items.Item("etClient").Specific).Value = string.Empty;
-                    //((SAPbouiCOM.EditText)oForm.Items.Item("etSecret").Specific).Value = string.Empty;
                 }
             }
             oForm.Refresh();
@@ -113,11 +106,9 @@ namespace AddOnConectorSIRE.Modules.Configuracion
                 else if (CONF.UEXXCONS == "2" && string.IsNullOrEmpty(CONF.UEXXURSL)) throw new Exception("Para el tipo de conexión SAP 'Service layer' debe llenar el campo URL Service Layer");
                 if (string.IsNullOrEmpty(CONF.UEXXVSAP)) throw new Exception("Debe seleccionar un método para la validacción de documentos SAP");
                 if (string.IsNullOrEmpty(CONF.UEXXVSIR)) throw new Exception("Debe seleccionar un método para la validacción de documentos SIRE");
-                //else if (CONF.UEXXVSIR == "2" && string.IsNullOrEmpty(CONF.UEXXAPIS)) throw new Exception("Para el tipo de validación SIRE 'API SIRE' debe llenar el campo URL API SIRE");
-                //else if (CONF.UEXXVSIR == "2" && string.IsNullOrEmpty(CONF.UEXXUSER)) throw new Exception("Para el tipo de validación SIRE 'API SIRE' debe llenar el campo Usuario SOL");
-                //else if (CONF.UEXXVSIR == "2" && string.IsNullOrEmpty(CONF.UEXXPASS)) throw new Exception("Para el tipo de validación SIRE 'API SIRE' debe llenar el campo Clave SOL");
-                //else if (CONF.UEXXVSIR == "2" && string.IsNullOrEmpty(CONF.UEXXCLID)) throw new Exception("Para el tipo de validación SIRE 'API SIRE' debe llenar el campo Client-Id");
-                //else if (CONF.UEXXVSIR == "2" && string.IsNullOrEmpty(CONF.UEXXCLSE)) throw new Exception("Para el tipo de validación SIRE 'API SIRE' debe llenar el campo Client-Secret");
+
+                //if (string.IsNullOrEmpty(empresa.UEXXAPIS) || string.IsNullOrEmpty(empresa.UEXXUSER) || string.IsNullOrEmpty(empresa.UEXXPASS) || string.IsNullOrEmpty(empresa.UEXXCLID) || string.IsNullOrEmpty(empresa.UEXXCLSE))
+                //    throw new Exception("La empresa selccionada no tiene la configuración completa por favor revise en: Gestión > EXX - SIRE SUNAT > EXX - Configuración SIRE");
             }
             catch (Exception ex)
             {
@@ -131,7 +122,7 @@ namespace AddOnConectorSIRE.Modules.Configuracion
             BubbleEvent = true;
             try
             {
-                SAPbouiCOM.Grid oGrid = (SAPbouiCOM.Grid)oForm.Items.Item("gEmpresas").Specific;
+                SAPbouiCOM.Matrix oGrid = (SAPbouiCOM.Matrix)oForm.Items.Item("mEmpresas").Specific;
                 if (((SAPbouiCOM.ComboBox)oForm.Items.Item("cbConSAP").Specific).Selected == null) throw new Exception("Dele seleccionar un tipo de Conexión SAP");
                 if (((SAPbouiCOM.ComboBox)oForm.Items.Item("cbValSAP").Specific).Selected == null) throw new Exception("Debe seleccionar un método para la validacción de documentos SAP");
                 if (((SAPbouiCOM.ComboBox)oForm.Items.Item("cbValSIRE").Specific).Selected == null) throw new Exception("Debe seleccionar un método para la validacción de documentos SIRE");
@@ -142,24 +133,19 @@ namespace AddOnConectorSIRE.Modules.Configuracion
                 CONFTEMP.UEXXVSAP = ((SAPbouiCOM.ComboBox)oForm.Items.Item("cbValSAP").Specific).Selected.Value;
                 CONFTEMP.UEXXURSL = ((SAPbouiCOM.EditText)oForm.Items.Item("etSL").Specific).Value;
                 CONFTEMP.UEXXVSIR = ((SAPbouiCOM.ComboBox)oForm.Items.Item("cbValSIRE").Specific).Selected.Value;
-                //CONFTEMP.UEXXAPIS = ((SAPbouiCOM.EditText)oForm.Items.Item("etAPI").Specific).Value;
-                //CONFTEMP.UEXXUSER = ((SAPbouiCOM.EditText)oForm.Items.Item("etUser").Specific).Value;
-                //CONFTEMP.UEXXPASS = ((SAPbouiCOM.EditText)oForm.Items.Item("etPass").Specific).Value;
-                //CONFTEMP.UEXXCLID = ((SAPbouiCOM.EditText)oForm.Items.Item("etClient").Specific).Value;
-                //CONFTEMP.UEXXCLSE = ((SAPbouiCOM.EditText)oForm.Items.Item("etSecret").Specific).Value;
                 CONFTEMP.APIS = new List<UEXXSIREAPIS>();
 
-                for (int i = 0; i < oGrid.Rows.Count; i++)
+                for (int i = 1; i <= oGrid.RowCount; i++)
                 {
                     CONFTEMP.APIS.Add(new UEXXSIREAPIS
                     {
-                        Code = oGrid.DataTable.GetValue("BPLId", i).ToString(),
-                        UEXXRUC = oGrid.DataTable.GetValue("GlblLocNum", i).ToString(),
-                        UEXXAPIS = oGrid.DataTable.GetValue("U_EXX_APIS", i).ToString(),
-                        UEXXUSER = oGrid.DataTable.GetValue("U_EXX_USER", i).ToString(),
-                        UEXXPASS = oGrid.DataTable.GetValue("U_EXX_PASS", i).ToString(),
-                        UEXXCLID = oGrid.DataTable.GetValue("U_EXX_CLID", i).ToString(),
-                        UEXXCLSE = oGrid.DataTable.GetValue("U_EXX_CLSE", i).ToString()
+                        Code = ((SAPbouiCOM.EditText)oGrid.Columns.Item("BPLId").Cells.Item(i).Specific).Value.ToString(),
+                        UEXXRUC = ((SAPbouiCOM.EditText)oGrid.Columns.Item("GlblLocNum").Cells.Item(i).Specific).Value.ToString(),
+                        UEXXAPIS = ((SAPbouiCOM.EditText)oGrid.Columns.Item("U_EXX_APIS").Cells.Item(i).Specific).Value.ToString(),
+                        UEXXUSER = ((SAPbouiCOM.EditText)oGrid.Columns.Item("U_EXX_USER").Cells.Item(i).Specific).Value.ToString(),
+                        UEXXPASS = ((SAPbouiCOM.EditText)oGrid.Columns.Item("U_EXX_PASS").Cells.Item(i).Specific).Value.ToString(),
+                        UEXXCLID = ((SAPbouiCOM.EditText)oGrid.Columns.Item("U_EXX_CLID").Cells.Item(i).Specific).Value.ToString(),
+                        UEXXCLSE = ((SAPbouiCOM.EditText)oGrid.Columns.Item("U_EXX_CLSE").Cells.Item(i).Specific).Value.ToString()
                     });
                 }
 
@@ -181,7 +167,7 @@ namespace AddOnConectorSIRE.Modules.Configuracion
                     Globals.Release(Globals.oRec);
                 }
                 Globals.CommitTransaction();
-
+                Globals.existeConf = true;
                 Globals.CONF = CONFTEMP;
                 Setup.ValidarVersion();
                 Menu.LoadMenu();
@@ -214,6 +200,35 @@ namespace AddOnConectorSIRE.Modules.Configuracion
             }
         }
 
+        public static void SetearPassword(ItemEvent pVal, Form oForm, out bool BubbleEvent)
+        {
+            BubbleEvent = true;
+            try
+            {
+                string Password = ((SAPbouiCOM.EditText)oForm.Items.Item("etPass").Specific).Value.Trim();
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("mEmpresas").Specific;
+
+                for (int i = 1; i <= oMatrix.RowCount; i++)
+                {
+                    if (oMatrix.IsRowSelected(i))
+                    {
+                        if (string.IsNullOrEmpty(Password))
+                            ((SAPbouiCOM.EditText)oMatrix.Columns.Item("U_EXX_PASS").Cells.Item(i).Specific).Value = Password;
+                        else
+                            ((SAPbouiCOM.EditText)oMatrix.Columns.Item("U_EXX_PASS").Cells.Item(i).Specific).Value = ExxisEncryptor.Encrypt(Password);
+
+                        return;
+                    }
+                }
+                Globals.ErrorMessage("Debe seleccionar una fila de la lista para actualizar el password.");
+            }
+            catch (Exception ex)
+            {
+                BubbleEvent = false;
+                throw ex;
+            }
+        }
+
         public static void MostrosOcultarCampos(ItemEvent pVal, Form oForm)
         {
             try
@@ -237,31 +252,24 @@ namespace AddOnConectorSIRE.Modules.Configuracion
                     case "cbValSIRE":
                         if (value == "1")
                         {
-                            oForm.Items.Item("gEmpresas").Visible = false;
-                            //oForm.Items.Item("stAPI").Visible = false;
-                            //oForm.Items.Item("etAPI").Visible = false;
-                            //oForm.Items.Item("stUser").Visible = false;
-                            //oForm.Items.Item("etUser").Visible = false;
-                            //oForm.Items.Item("stPass").Visible = false;
-                            //oForm.Items.Item("etPass").Visible = false;
-                            //oForm.Items.Item("stClient").Visible = false;
-                            //oForm.Items.Item("etClient").Visible = false;
-                            //oForm.Items.Item("stSecret").Visible = false;
-                            //oForm.Items.Item("etSecret").Visible = false;
+                            oForm.Items.Item("mEmpresas").Visible = false;
+                            oForm.Items.Item("stPass").Visible = false;
+                            oForm.Items.Item("etPass").Visible = false;
+                            oForm.Items.Item("3").Visible = false;
                         }
                         else
                         {
-                            oForm.Items.Item("gEmpresas").Visible = true;
-                            //oForm.Items.Item("stAPI").Visible = true;
-                            //oForm.Items.Item("etAPI").Visible = true;
-                            //oForm.Items.Item("stUser").Visible = true;
-                            //oForm.Items.Item("etUser").Visible = true;
-                            //oForm.Items.Item("stPass").Visible = true;
-                            //oForm.Items.Item("etPass").Visible = true;
-                            //oForm.Items.Item("stClient").Visible = true;
-                            //oForm.Items.Item("etClient").Visible = true;
-                            //oForm.Items.Item("stSecret").Visible = true;
-                            //oForm.Items.Item("etSecret").Visible = true;
+                            oForm.Items.Item("mEmpresas").Visible = true;
+                            oForm.Items.Item("stPass").Visible = true;
+                            oForm.Items.Item("etPass").Visible = true;
+                            oForm.Items.Item("3").Visible = true;
+
+                            SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("mEmpresas").Specific;
+                            for (int i = 1; i <= oMatrix.RowCount; i++)
+                            {
+                                SAPbouiCOM.EditText celda = ((SAPbouiCOM.EditText)oMatrix.Columns.Item("U_EXX_PASS").Cells.Item(i).Specific);
+                                celda.IsPassword = true;
+                            }
                         }
                         break;
                 }

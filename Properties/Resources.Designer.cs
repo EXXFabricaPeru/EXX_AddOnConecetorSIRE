@@ -61,6 +61,16 @@ namespace AddOnConectorSIRE.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a SELECT TOP 1 &quot;Code&quot;, &quot;U_EXX_DATE&quot;, &quot;U_EXX_HORA&quot;, &quot;U_EXX_ARCHTXT&quot;, &quot;U_EXX_CONTENIDO&quot; FROM &quot;@EXX_SIRE_SERV&quot;
+        ///WHERE &quot;U_EXX_TIPO&quot; = {0} AND &quot;U_EXX_BPLID&quot; = &apos;{1}&apos; AND &quot;U_EXX_PERIODO&quot; = &apos;{2}&apos; AND &quot;U_EXX_ESTADO&quot; = 0 ORDER BY &quot;Code&quot; DESC.
+        /// </summary>
+        internal static string HANA_ConsultaExisteLog {
+            get {
+                return ResourceManager.GetString("HANA_ConsultaExisteLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a SELECT * FROM &quot;@EXX_SIRE_APIS&quot; WHERE &quot;Code&quot; = &apos;{0}&apos;.
         /// </summary>
         internal static string HANA_ExisteConfAPI {
@@ -165,31 +175,97 @@ namespace AddOnConectorSIRE.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a SELECT T0.&quot;ObjType&quot;, T0.&quot;DocEntry&quot; 
+        ///   Busca una cadena traducida similar a SELECT T0.&quot;ObjType&quot;, T0.&quot;DocEntry&quot;
         ///FROM OPCH T0
         ///INNER JOIN OCRD T1 ON T0.&quot;CardCode&quot; = T1.&quot;CardCode&quot;
-        ///WHERE IFNULL(T0.&quot;BPLId&quot;, 0) = {0} AND T1.&quot;LicTradNum&quot; = &apos;{1}&apos; AND T0.&quot;Indicator&quot; = &apos;{2}&apos; AND T0.&quot;NumAtCard&quot; = &apos;{3}-{4}&apos; 
+        ///WHERE IFNULL(T0.&quot;BPLId&quot;, 0) = {0}
+        ///AND T1.&quot;LicTradNum&quot; = &apos;{1}&apos;
+        ///AND T0.&quot;Indicator&quot; = &apos;{2}&apos;
+        ///AND LOCATE(T0.&quot;NumAtCard&quot;, &apos;-&apos;) &gt; 0
+        ///AND SUBSTRING(T0.&quot;NumAtCard&quot;, 1, LOCATE(T0.&quot;NumAtCard&quot;, &apos;-&apos;) - 1) = &apos;{3}&apos;
+        ///AND LTRIM(SUBSTRING(T0.&quot;NumAtCard&quot;, LOCATE(T0.&quot;NumAtCard&quot;, &apos;-&apos;) + 1),&apos;0&apos;) = LTRIM(&apos;{4}&apos;,&apos;0&apos;)
+        ///
         ///UNION ALL
-        ///SELECT T0.&quot;ObjType&quot;, T0.&quot;DocEntry&quot; 
+        ///
+        ///SELECT T0.&quot;ObjType&quot;, T0.&quot;DocEntry&quot;
         ///FROM ODPO T0
-        ///INNER JOIN OCRD T1 ON T0.&quot;CardCode&quot; = T1.&quot;CardCode&quot;
-        ///WHERE IFNULL(T0.&quot;BPLId&quot;, 0) = {0} AND T1.&quot;LicTradNum&quot; = &apos;{1}&apos; AND T0.&quot;Indicator&quot; = &apos;{2}&apos; AND T0.&quot;NumAtCard&quot; = &apos;{3}-{4}&apos; 
-        ///UNION ALL
-        ///SELECT T0.&quot;ObjType&quot;, T0.&quot;DocEntry&quot; 
-        ///F [resto de la cadena truncado]&quot;;.
+        ///INNER JOIN OCRD T1 ON T0.&quot;CardCode&quot; = T1.&quot;Card [resto de la cadena truncado]&quot;;.
         /// </summary>
-        internal static string HANA_ObtieneLlavesDocumentos {
+        internal static string HANA_ObtieneLlavesDocumentosCompra {
             get {
-                return ResourceManager.GetString("HANA_ObtieneLlavesDocumentos", resourceCulture);
+                return ResourceManager.GetString("HANA_ObtieneLlavesDocumentosCompra", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a SELECT * FROM &quot;@EXX_SIRE_COMP&quot; WHERE &quot;U_EXX_PERIODO&quot; = &apos;{0}&apos; AND &quot;U_EXX_BPLID&quot; = &apos;{1}&apos;.
+        ///   Busca una cadena traducida similar a SELECT top 10 T0.&quot;ObjType&quot;, T0.&quot;DocEntry&quot;
+        ///FROM OINV T0
+        ///INNER JOIN OCRD T1 ON T0.&quot;CardCode&quot; = T1.&quot;CardCode&quot;
+        ///INNER JOIN NNM1 T2 ON T0.&quot;Series&quot; = T2.&quot;Series&quot;
+        ///WHERE IFNULL(T0.&quot;BPLId&quot;, 0) = {0}
+        ///AND T1.&quot;LicTradNum&quot; = &apos;{1}&apos;
+        ///AND T0.&quot;Indicator&quot; = &apos;{2}&apos;
+        ///AND (T0.&quot;FolioPref&quot; = &apos;{3}&apos; OR T2.&quot;SeriesName&quot; = &apos;{3}&apos;)
+        ///AND T0.&quot;FolioNum&quot; = LTRIM(&apos;{4}&apos;,&apos;0&apos;)
+        ///
+        ///UNION ALL
+        ///
+        ///SELECT T0.&quot;ObjType&quot;, T0.&quot;DocEntry&quot;
+        ///FROM ODPI T0
+        ///INNER JOIN OCRD T1 ON T0.&quot;CardCode&quot; = T1.&quot;CardCode&quot;
+        ///INNER JOIN NNM1 T2 ON T0.&quot;Series&quot; = T2.&quot;Series&quot;        /// [resto de la cadena truncado]&quot;;.
+        /// </summary>
+        internal static string HANA_ObtieneLlavesDocumentosVenta {
+            get {
+                return ResourceManager.GetString("HANA_ObtieneLlavesDocumentosVenta", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a CREATE PROCEDURE &quot;SBO_EXX_SIRE_ASISTENTE_MASIVO&quot; (
+        ///	IN TIPO VARCHAR (1) 
+        ///	, IN PROCESO VARCHAR (1)
+        ///	, IN PERIODO VARCHAR (1) 
+        ///) 
+        ///AS
+        ///BEGIN
+        ///
+        ///	IF :TIPO = &apos;C&apos; THEN
+        ///		IF :PROCESO = &apos;-&apos; THEN
+        ///			SELECT 
+        ///			(CASE WHEN IFNULL(T2.&quot;DocEntry&quot;, 0) = 0 THEN &apos;N&apos; ELSE &apos;Y&apos; END) AS &quot;Sel&quot;,
+        ///			T0.&quot;Code&quot; AS &quot;BPLId&quot;,
+        ///			T1.&quot;GlblLocNum&quot;,
+        ///			T1.&quot;BPLName&quot; AS &quot;BPLName&quot;,
+        ///			T0.&quot;U_EXX_APIS&quot;,
+        ///			T0.&quot;U_EXX_USER&quot;,
+        ///			T0.&quot;U_EXX_PASS&quot;,
+        ///			T0.&quot;U_EXX_CLID&quot;,
+        ///			T0.&quot;U_EXX_CLSE&quot;,
+        ///			IFNULL(T2.&quot;DocEntry&quot;, 0) &quot;DocEntry&quot;
+        ///			FR [resto de la cadena truncado]&quot;;.
+        /// </summary>
+        internal static string HANA_SBO_EXX_SIRE_ASISTENTE_MASIVO {
+            get {
+                return ResourceManager.GetString("HANA_SBO_EXX_SIRE_ASISTENTE_MASIVO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a SELECT * FROM &quot;@EXX_SIRE_COMP&quot; WHERE &quot;U_EXX_PERIODO&quot; = &apos;{0}&apos; AND &quot;U_EXX_BPLID&quot; = &apos;{1}&apos; AND IFNULL(&quot;Canceled&quot;, &apos;&apos;) = &apos;N&apos;.
         /// </summary>
         internal static string HANA_ValidaExisteRegistroCompra {
             get {
                 return ResourceManager.GetString("HANA_ValidaExisteRegistroCompra", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a SELECT * FROM &quot;@EXX_SIRE_VENT&quot; WHERE &quot;U_EXX_PERIODO&quot; = &apos;{0}&apos; AND &quot;U_EXX_BPLID&quot; = &apos;{1}&apos; AND IFNULL(&quot;Canceled&quot;, &apos;&apos;) = &apos;N&apos;.
+        /// </summary>
+        internal static string HANA_ValidaExisteRegistroVenta {
+            get {
+                return ResourceManager.GetString("HANA_ValidaExisteRegistroVenta", resourceCulture);
             }
         }
         
@@ -202,6 +278,16 @@ namespace AddOnConectorSIRE.Properties {
         internal static string HANA_ValidarTabla {
             get {
                 return ResourceManager.GetString("HANA_ValidarTabla", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a SELECT TOP 1 Code, U_EXX_DATE, U_EXX_HORA, U_EXX_ARCHTXT, U_EXX_CONTENIDO FROM [@EXX_SIRE_SERV]
+        ///WHERE U_EXX_TIPO = {0} AND U_EXX_BPLID = &apos;{1}&apos; AND U_EXX_PERIODO = &apos;{2}&apos; AND U_EXX_ESTADO =0 ORDER BY Code DESC.
+        /// </summary>
+        internal static string SQL_ConsultaExisteLog {
+            get {
+                return ResourceManager.GetString("SQL_ConsultaExisteLog", resourceCulture);
             }
         }
         
@@ -232,11 +318,11 @@ namespace AddOnConectorSIRE.Properties {
         /// <summary>
         ///   Busca una cadena traducida similar a SELECT 
         ///    Code,
-        ///    Name
+        ///    Name,
         ///    ISNULL(U_EXX_ADDN, &apos;&apos;)    AS U_EXX_ADDN,
         ///    ISNULL(U_EXX_VERS, &apos;&apos;)    AS U_EXX_VERS,
         ///    ISNULL(U_EXX_RUTA, &apos;&apos;)    AS U_EXX_RUTA
-        ///FROM [@EXX_SETUP];.
+        ///FROM [@EXX_SETUP].
         /// </summary>
         internal static string SQL_ListarSetup {
             get {
@@ -261,7 +347,7 @@ namespace AddOnConectorSIRE.Properties {
         ///    ISNULL(U_EXX_VSAP, &apos;&apos;)    AS U_EXX_VSAP,
         ///    ISNULL(U_EXX_VSIR, &apos;&apos;)    AS U_EXX_VSIR
         ///FROM [@EXX_SIRE_CONF]
-        ///WHERE Code, = &apos;01&apos;;.
+        ///WHERE Code = &apos;01&apos;.
         /// </summary>
         internal static string SQL_ObtenerConfiguracion {
             get {
@@ -310,27 +396,79 @@ namespace AddOnConectorSIRE.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a SELECT T0.&quot;ObjType&quot;, T0.&quot;DocEntry&quot; 
+        ///   Busca una cadena traducida similar a SELECT T0.&quot;ObjType&quot;, T0.&quot;DocEntry&quot;
         ///FROM OPCH T0
         ///INNER JOIN OCRD T1 ON T0.&quot;CardCode&quot; = T1.&quot;CardCode&quot;
-        ///WHERE IFNULL(T0.&quot;BPLId&quot;, 0) = {0} AND T1.&quot;LicTradNum&quot; = &apos;{1}&apos; AND T0.&quot;Indicator&quot; = &apos;{2}&apos; AND T0.&quot;NumAtCard&quot; = &apos;{3}-{4}&apos; 
-        ///UNION ALL
-        ///SELECT T0.&quot;ObjType&quot;, T0.&quot;DocEntry&quot; 
-        ///FROM ODPO T0
-        ///INNER JOIN OCRD T1 ON T0.&quot;CardCode&quot; = T1.&quot;CardCode&quot;
-        ///WHERE IFNULL(T0.&quot;BPLId&quot;, 0) = {0} AND T1.&quot;LicTradNum&quot; = &apos;{1}&apos; AND T0.&quot;Indicator&quot; = &apos;{2}&apos; AND T0.&quot;NumAtCard&quot; = &apos;{3}-{4}&apos; 
-        ///UNION ALL
-        ///SELECT T0.&quot;ObjType&quot;, T0.&quot;DocEntry&quot; 
-        ///F [resto de la cadena truncado]&quot;;.
+        ///WHERE ISNULL(T0.&quot;BPLId&quot;, 0) = {0}
+        ///AND T1.&quot;LicTradNum&quot; = &apos;{1}&apos;
+        ///AND T0.&quot;Indicator&quot; = &apos;{2}&apos;
+        ///AND CHARINDEX(&apos;-&apos;, T0.&quot;NumAtCard&quot;) &gt; 0
+        ///AND LEFT(T0.&quot;NumAtCard&quot;, CHARINDEX(&apos;-&apos;, T0.&quot;NumAtCard&quot;) - 1) = &apos;{3}&apos;
+        ///AND SUBSTRING(
+        ///        SUBSTRING(T0.&quot;NumAtCard&quot;, CHARINDEX(&apos;-&apos;, T0.&quot;NumAtCard&quot;) + 1, LEN(T0.&quot;NumAtCard&quot;)),
+        ///        PATINDEX(&apos;%[^0]%&apos;, SUBSTRING(T0.&quot;NumAtCard&quot;, CHARINDEX(&apos;-&apos;, T0.&quot;NumAtCard&quot;) + 1, LEN(T0.&quot;N [resto de la cadena truncado]&quot;;.
         /// </summary>
-        internal static string SQL_ObtieneLlavesDocumentos {
+        internal static string SQL_ObtieneLlavesDocumentosCompra {
             get {
-                return ResourceManager.GetString("SQL_ObtieneLlavesDocumentos", resourceCulture);
+                return ResourceManager.GetString("SQL_ObtieneLlavesDocumentosCompra", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a SELECT * FROM [@EXX_SIRE_COMP] WHERE U_EXX_PERIODO = &apos;{0}&apos; AND U_EXX_BPLID = &apos;{1}&apos;.
+        ///   Busca una cadena traducida similar a SELECT T0.&quot;ObjType&quot;, T0.&quot;DocEntry&quot;
+        ///FROM OINV T0
+        ///INNER JOIN OCRD T1 ON T0.&quot;CardCode&quot; = T1.&quot;CardCode&quot;
+        ///INNER JOIN NNM1 T2 ON T0.&quot;Series&quot; = T2.&quot;Series&quot;
+        ///WHERE ISNULL(T0.&quot;BPLId&quot;, 0) = {0}
+        ///AND T1.&quot;LicTradNum&quot; = &apos;{1}&apos;
+        ///AND T0.&quot;Indicator&quot; = &apos;{2}&apos;
+        ///AND (T0.&quot;FolioPref&quot; = &apos;{3}&apos; OR T2.&quot;SeriesName&quot; = &apos;{3}&apos;)
+        ///AND T0.&quot;FolioNum&quot; = LTRIM(&apos;{4}&apos;,&apos;0&apos;)
+        ///
+        ///
+        ///UNION ALL
+        ///
+        ///SELECT T0.&quot;ObjType&quot;, T0.&quot;DocEntry&quot;
+        ///FROM ODPI T0
+        ///INNER JOIN OCRD T1 ON T0.&quot;CardCode&quot; = T1.&quot;CardCode&quot;
+        ///INNER JOIN NNM1 T2 ON T0.&quot;Series&quot; = T2.&quot;Series&quot;
+        ///WHER [resto de la cadena truncado]&quot;;.
+        /// </summary>
+        internal static string SQL_ObtieneLlavesDocumentosVenta {
+            get {
+                return ResourceManager.GetString("SQL_ObtieneLlavesDocumentosVenta", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a CREATE PROCEDURE SBO_EXX_SIRE_ASISTENTE_MASIVO
+        ///    @TIPO VARCHAR(1),
+        ///    @PROCESO VARCHAR(1),
+        ///    @PERIODO VARCHAR(1)
+        ///AS
+        ///BEGIN
+        ///    SET NOCOUNT ON;
+        ///
+        ///    -- Cuando tipo es C (Compras)
+        ///    IF @TIPO = &apos;C&apos;
+        ///    BEGIN
+        ///        -- Cuando proceso es &apos;-&apos;
+        ///        IF @PROCESO = &apos;-&apos;
+        ///        BEGIN
+        ///            SELECT 
+        ///                (CASE WHEN ISNULL(CAST(T2.DocEntry AS VARCHAR(50)), &apos;&apos;) = &apos;&apos; THEN &apos;N&apos; ELSE &apos;Y&apos; END) AS Sel,
+        ///                T0.Code AS BPLId,
+        ///                T1.GlblLocNum,
+        ///                T [resto de la cadena truncado]&quot;;.
+        /// </summary>
+        internal static string SQL_SBO_EXX_SIRE_ASISTENTE_MASIVO {
+            get {
+                return ResourceManager.GetString("SQL_SBO_EXX_SIRE_ASISTENTE_MASIVO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a SELECT * FROM [@EXX_SIRE_COMP] WHERE U_EXX_PERIODO = &apos;{0}&apos; AND U_EXX_BPLID = &apos;{1}&apos; AND ISNULL(Canceled, &apos;&apos;) = &apos;N&apos;.
         /// </summary>
         internal static string SQL_ValidaExisteRegistroCompra {
             get {
@@ -339,10 +477,18 @@ namespace AddOnConectorSIRE.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a SELECT TABLE_NAME
-        ///FROM SYS.M_TABLES
-        ///WHERE SCHEMA_NAME = &apos;{0}&apos;
-        ///AND TABLE_NAME = &apos;{1}&apos;;.
+        ///   Busca una cadena traducida similar a SELECT * FROM [@EXX_SIRE_VENT] WHERE U_EXX_PERIODO = &apos;{0}&apos; AND U_EXX_BPLID = &apos;{1}&apos; AND ISNULL(Canceled, &apos;&apos;) = &apos;N&apos;.
+        /// </summary>
+        internal static string SQL_ValidaExisteRegistroVenta {
+            get {
+                return ResourceManager.GetString("SQL_ValidaExisteRegistroVenta", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a SELECT name
+        ///FROM {0}.sys.tables
+        ///WHERE name = &apos;{1}&apos;.
         /// </summary>
         internal static string SQL_ValidarTabla {
             get {

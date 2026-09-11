@@ -26,7 +26,8 @@ namespace AddOnConectorSIRE.Entities
         [JsonProperty("CanArchive")] public string CanArchive { get; set; }
         [JsonProperty("EnableEnhancedForm")] public string EnableEnhancedForm { get; set; }
         [JsonProperty("RebuildEnhancedForm")] public string RebuildEnhancedForm { get; set; }
-
+        [JsonProperty("FormSRF")] public string FormSRF { get; set; }
+        [JsonProperty("ApplyAuthorization")] public string ApplyAuthorization { get; set; }
         [JsonProperty("UserObjectMD_ChildTables")] public List<UserObjectMDChildTable> UserObjectMD_ChildTables { get; set; }
         [JsonProperty("UserObjectMD_FindColumns")] public List<UserObjectMDFindColumn> UserObjectMD_FindColumns { get; set; }
         [JsonProperty("UserObjectMD_FormColumns")] public List<UserObjectMDFormColumn> UserObjectMD_FormColumns { get; set; }

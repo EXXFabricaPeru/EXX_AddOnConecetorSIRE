@@ -17,5 +17,6 @@ namespace AddOnConectorSIRE.Entities
         [JsonProperty("U_EXX_PASS")] public string UEXXPASS { get; set; } //Clave SAP
         [JsonProperty("U_EXX_CLID")] public string UEXXCLID { get; set; } //Client id
         [JsonProperty("U_EXX_CLSE")] public string UEXXCLSE { get; set; } //Client secret
+        public string TOKEN { get; set; } //Client secret
     }
 }

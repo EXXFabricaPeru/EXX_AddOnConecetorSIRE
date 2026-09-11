@@ -1,4 +1,26 @@
 ﻿[
+  // Estado
+  {
+    "TableName": "@EXX_SIRE_COMP",
+    "Name": "EXX_ESTADO",
+    "Description": "Estado",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 1,
+    "DefaultValue": "0",
+    "Mandatory": "tNO",
+    "ValidValuesMD": [
+      {
+        "Value": "0",
+        "Description": "En proceso"
+      },
+      {
+        "Value": "1",
+        "Description": "Enviado"
+      }
+    ]
+  },
+
   // Periodo
   {
     "TableName": "@EXX_SIRE_COMP",
@@ -46,6 +68,7 @@
     "Mandatory": "tNO",
     "ValidValuesMD": []
   },
+  //Empresa
   {
     "TableName": "@EXX_SIRE_COMP",
     "Name": "EXX_BPLID",
@@ -53,6 +76,18 @@
     "Type": "db_Alpha",
     "SubType": "st_None",
     "EditSize": 254,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  //Numero de ticket
+  {
+    "TableName": "@EXX_SIRE_COMP",
+    "Name": "EXX_TICKET",
+    "Description": "Ticket",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 50,
     "DefaultValue": "",
     "Mandatory": "tNO",
     "ValidValuesMD": []
@@ -374,7 +409,7 @@
     "Type": "db_Float",
     "SubType": "st_Price",
     "EditSize": 10,
-    "DefaultValue": 0.00,
+    "DefaultValue": "",
     "Mandatory": "tNO",
     "ValidValuesMD": []
   },
@@ -382,9 +417,8 @@
     "TableName": "@EXX_SIRE_COMP1",
     "Name": "EXX_FEMOD",
     "Description": "Fecha Emision Doc Modificado",
-    "Type": "db_Alpha",
+    "Type": "db_Date",
     "SubType": "st_None",
-    "EditSize": 8,
     "DefaultValue": "",
     "Mandatory": "tNO",
     "ValidValuesMD": []
@@ -1007,6 +1041,675 @@
     "Type": "db_Numeric",
     "SubType": "st_None",
     "DefaultValue": "0",
+    "ValidValuesMD": []
+  },
+  // Estado
+  {
+    "TableName": "@EXX_SIRE_VENT",
+    "Name": "EXX_ESTADO",
+    "Description": "Estado",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 1,
+    "DefaultValue": "0",
+    "Mandatory": "tNO",
+    "ValidValuesMD": [
+      {
+        "Value": "0",
+        "Description": "En proceso"
+      },
+      {
+        "Value": "1",
+        "Description": "Enviado"
+      }
+    ]
+  },
+  // Periodo
+  {
+    "TableName": "@EXX_SIRE_VENT",
+    "Name": "EXX_PERIODO",
+    "Description": "Periodo",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 7,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  // Fecha Registro
+  {
+    "TableName": "@EXX_SIRE_VENT",
+    "Name": "EXX_FECREG",
+    "Description": "Fecha Registro",
+    "Type": "db_Date",
+    "SubType": "st_None",
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  // Archivo SIRE
+  {
+    "TableName": "@EXX_SIRE_VENT",
+    "Name": "EXX_ARCHTXT",
+    "Description": "Archivo SIRE",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 254,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  // Archivo SAP
+  {
+    "TableName": "@EXX_SIRE_VENT",
+    "Name": "EXX_ARCHSAP",
+    "Description": "Archivo SAP",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 254,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  //Empresa
+  {
+    "TableName": "@EXX_SIRE_VENT",
+    "Name": "EXX_BPLID",
+    "Description": "Empresa",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 254,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  //Numero de ticket
+  {
+    "TableName": "@EXX_SIRE_VENT",
+    "Name": "EXX_TICKET",
+    "Description": "Ticket",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 50,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_OBJTYPE",
+    "Description": "Tipo SAP",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 30,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_DOCENTRY",
+    "Description": "Número SAP",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 30,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_RUC",
+    "Description": "RUC",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 20,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_RAZSOC",
+    "Description": "Apellidos y Nombres o Razon social",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 100,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_PERIODO",
+    "Description": "Periodo",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 7,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_CARSUN",
+    "Description": "CAR SUNAT",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 30,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_FEMI",
+    "Description": "Fecha de emision",
+    "Type": "db_Date",
+    "SubType": "st_None",
+    "EditSize": 10,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_FVCTO",
+    "Description": "Fecha Vcto/Pago",
+    "Type": "db_Date",
+    "SubType": "st_None",
+    "EditSize": 10,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_TIPDOC",
+    "Description": "Tipo CP/Doc",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 2,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_SERIE",
+    "Description": "Serie del CP",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 10,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_NROINI",
+    "Description": "Nro Inicial Rango",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 10,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_NROFIN",
+    "Description": "Nro Final Rango",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 10,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_TIPIDE",
+    "Description": "Tipo Doc Identidad",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 2,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_NUMIDE",
+    "Description": "Nro Doc Identidad",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 20,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_RAZCLI",
+    "Description": "Apellidos Nombres o Razon Social",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 100,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_VFAEX",
+    "Description": "Valor Facturado Exportación",
+    "Type": "db_Float",
+    "SubType": "st_Price",
+    "EditSize": 10,
+    "DefaultValue": 0.00,
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_BIGRA",
+    "Description": "BI Gravado",
+    "Type": "db_Float",
+    "SubType": "st_Price",
+    "EditSize": 10,
+    "DefaultValue": 0.00,
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_DESBI",
+    "Description": "Dscto BI",
+    "Type": "db_Float",
+    "SubType": "st_Price",
+    "EditSize": 10,
+    "DefaultValue": 0.00,
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_IGVIPM",
+    "Description": "IGV/IPM",
+    "Type": "db_Float",
+    "SubType": "st_Price",
+    "EditSize": 10,
+    "DefaultValue": 0.00,
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_DESII",
+    "Description": "Dscto IGV/IPM",
+    "Type": "db_Float",
+    "SubType": "st_Price",
+    "EditSize": 10,
+    "DefaultValue": 0.00,
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_MOEX",
+    "Description": "Monto Exonerado",
+    "Type": "db_Float",
+    "SubType": "st_Price",
+    "EditSize": 10,
+    "DefaultValue": 0.00,
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_MOIN",
+    "Description": "Monto Inafecto",
+    "Type": "db_Float",
+    "SubType": "st_Price",
+    "EditSize": 10,
+    "DefaultValue": 0.00,
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_ISC",
+    "Description": "ISC",
+    "Type": "db_Float",
+    "SubType": "st_Price",
+    "EditSize": 10,
+    "DefaultValue": 0.00,
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_BIGIP",
+    "Description": "BI Grav IVAP",
+    "Type": "db_Float",
+    "SubType": "st_Price",
+    "EditSize": 10,
+    "DefaultValue": 0.00,
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_IVAP",
+    "Description": "IVAP",
+    "Type": "db_Float",
+    "SubType": "st_Price",
+    "EditSize": 10,
+    "DefaultValue": 0.00,
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_ICBPER",
+    "Description": "ICBPER",
+    "Type": "db_Float",
+    "SubType": "st_Price",
+    "EditSize": 10,
+    "DefaultValue": 0.00,
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_OTRIB",
+    "Description": "Otros Tributos",
+    "Type": "db_Float",
+    "SubType": "st_Price",
+    "EditSize": 10,
+    "DefaultValue": 0.00,
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_TOTAL",
+    "Description": "Total CP",
+    "Type": "db_Float",
+    "SubType": "st_Price",
+    "EditSize": 10,
+    "DefaultValue": 0.00,
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_MONEDA",
+    "Description": "Moneda",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 3,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_TCAMBIO",
+    "Description": "Tipo de Cambio",
+    "Type": "db_Float",
+    "SubType": "st_Price",
+    "EditSize": 10,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_FEMOD",
+    "Description": "Fecha Emision Doc Modificado",
+    "Type": "db_Date",
+    "SubType": "st_None",
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_TIPMOD",
+    "Description": "Tipo CP Modificado",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 2,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_SERMOD",
+    "Description": "Serie CP Modificado",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 10,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_NUMMOD",
+    "Description": "Nro CP Modificado",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 20,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_IDPOA",
+    "Description": "ID Proy. Operadores Atrib.",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 20,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_TIPNOT",
+    "Description": "Tipo de Nota",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 2,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_ESTCOM",
+    "Description": "Est. Comp",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 3,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_VFOBE",
+    "Description": "Valor FOB Embarcado",
+    "Type": "db_Float",
+    "SubType": "st_Price",
+    "EditSize": 10,
+    "DefaultValue": 0.00,
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_VOPGRA",
+    "Description": "Valor OP Gratuitas",
+    "Type": "db_Float",
+    "SubType": "st_Price",
+    "EditSize": 10,
+    "DefaultValue": 0.00,
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_TIPOPE",
+    "Description": "Tipo Operación",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 2,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_DAMCP",
+    "Description": "DAM/CP",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 20,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_CLU1",
+    "Description": "CLU1",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 100,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_VENT1",
+    "Name": "EXX_ORIGEN",
+    "Description": "ORIGEN",
+    "Type": "db_Numeric",
+    "SubType": "st_None",
+    "DefaultValue": "0",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_SERV",
+    "Name": "EXX_TIPO",
+    "Description": "Tipo",
+    "Type": "db_Numeric",
+    "SubType": "st_None",
+    "DefaultValue": "0",
+    "ValidValuesMD": [
+      {
+        "Value": "0",
+        "Description": "VENTA"
+      },
+      {
+        "Value": "1",
+        "Description": "COMPRA"
+      }
+    ]
+  },
+  {
+    "TableName": "@EXX_SIRE_SERV",
+    "Name": "EXX_ESTADO",
+    "Description": "Estado",
+    "Type": "db_Numeric",
+    "SubType": "st_None",
+    "DefaultValue": "0",
+    "ValidValuesMD": [
+      {
+        "Value": "0",
+        "Description": "OK"
+      },
+      {
+        "Value": "1",
+        "Description": "ERROR"
+      }
+    ]
+  },
+  {
+    "TableName": "@EXX_SIRE_SERV",
+    "Name": "EXX_BPLID",
+    "Description": "Empresa",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 254,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_SERV",
+    "Name": "EXX_DATE",
+    "Description": "Fecha consulta",
+    "Type": "db_Date",
+    "SubType": "st_None",
+    "DefaultValue": "",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_SERV",
+    "Name": "EXX_HORA",
+    "Description": "Hora consulta",
+    "Type": "db_Date",
+    "SubType": "st_Time",
+    "DefaultValue": "",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_SERV",
+    "Name": "EXX_PERIODO",
+    "Description": "Período",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 7,
+    "DefaultValue": "",
+    "Mandatory": "tYES",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_SERV",
+    "Name": "EXX_ARCHTXT",
+    "Description": "Nombre Archivo",
+    "Type": "db_Alpha",
+    "SubType": "st_None",
+    "EditSize": 254,
+    "DefaultValue": "",
+    "Mandatory": "tYES",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_SERV",
+    "Name": "EXX_CANTIDAD",
+    "Description": "Cantidad caracteres",
+    "Type": "db_Numeric",
+    "SubType": "st_None",
+    "DefaultValue": "0",
+    "ValidValuesMD": []
+  },
+  {
+    "TableName": "@EXX_SIRE_SERV",
+    "Name": "EXX_CONTENIDO",
+    "Description": "Contenido",
+    "Type": "db_Memo",
+    "SubType": "st_None",
+    "EditSize": 10000,
+    "DefaultValue": "",
+    "Mandatory": "tNO",
     "ValidValuesMD": []
   }
 ]

@@ -1,16 +1,10 @@
 ﻿using AddOnConectorSIRE.Entities;
 using Newtonsoft.Json.Linq;
-using SAPbouiCOM;
-using SAPbouiCOM.Framework;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
+using System.Globalization;
 using System.Linq;
-using System.Reflection;
-using System.Resources;
-using System.Text;
-using System.Threading.Tasks;
 using Application = SAPbouiCOM.Framework.Application;
 
 namespace AddOnConectorSIRE
@@ -20,7 +14,7 @@ namespace AddOnConectorSIRE
         public static RevalMain Addon;
         public static String ShortName = "(EXX)";
         public static string AddOnName = "AddOn Conector SIRE";
-        public static string AddOnVersion = "1.0.0.0";
+        public static string AddOnVersion = "1.0.2.6";
         public static int continuar = -1;
         public static string Query = null;
         public static SAPbobsCOM.Recordset oRec = default(SAPbobsCOM.Recordset);
@@ -28,6 +22,13 @@ namespace AddOnConectorSIRE
         public static SAPbobsCOM.Company oCompany;
         public static int sErrCode;
         public static string sErrMsg = null;
+
+        public static string LibroCompra = "080000";
+        public static string LibroVenta = "140000";
+        public static string LibroNoDom = "080000";
+        public static string ProcesoCompra = "61";
+        public static string ProcesoNoDom = "56";
+        public static string ProcesoVenta = "3";
 
         public static Application oApp;
 
@@ -307,10 +308,11 @@ namespace AddOnConectorSIRE
 
         public static bool IsNumeric(string value)
         {
-            return double.TryParse(value, out _);
+            double numero;
+            return double.TryParse(value, out numero);
         }
 
-        internal static string BuildFilter(Tuple<string, string, string>[] prms)
+        public static string BuildFilter(Tuple<string, string, string>[] prms)
         {
             try
             {
@@ -334,6 +336,25 @@ namespace AddOnConectorSIRE
             }
         }
 
+        public static string FormatearFecha(string fecha)
+        {
+            if (string.IsNullOrWhiteSpace(fecha))
+                return "";
+
+            DateTime fechaConvertida;
+            if (DateTime.TryParseExact(
+                    fecha,
+                    "yyyyMMdd",
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out fechaConvertida))
+            {
+                return fechaConvertida.ToString("dd/MM/yyyy");
+            }
+
+            return "";
+        }
+
         public static bool IsHana()
         {
             try
@@ -347,6 +368,49 @@ namespace AddOnConectorSIRE
             {
                 Globals.SBO_Application.MessageBox(ex.Message);
                 return false;
+            }
+        }
+
+        public static int GetColIndex(SAPbouiCOM.Matrix oGrid, string Columna, int indice)
+        {
+            try
+            {
+                while (oGrid.Columns.Count > indice)
+                {
+                    if (oGrid.Columns.Item(indice).UniqueID == Columna)
+                        break;
+                    indice++;
+                }
+                return indice;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void SetDecimalSeparator()
+        {
+            try
+            {
+                string decSeparator = Globals.oCompany.GetCompanyService().GetAdminInfo().DecimalSeparator;
+                string thsSeparator = Globals.oCompany.GetCompanyService().GetAdminInfo().ThousandsSeparator;
+
+                CultureInfo currentCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
+                CultureInfo newCulture = new CultureInfo(currentCulture.IetfLanguageTag);
+                newCulture.NumberFormat.NumberDecimalSeparator = decSeparator;
+                newCulture.NumberFormat.CurrencyDecimalSeparator = decSeparator;
+                newCulture.NumberFormat.PercentDecimalSeparator = decSeparator;
+                newCulture.NumberFormat.NumberGroupSeparator = thsSeparator;
+                newCulture.NumberFormat.CurrencyGroupSeparator = thsSeparator;
+                newCulture.NumberFormat.PercentGroupSeparator = thsSeparator;
+
+                System.Threading.Thread.CurrentThread.CurrentCulture = newCulture;
+                CultureInfo.DefaultThreadCurrentCulture = newCulture;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

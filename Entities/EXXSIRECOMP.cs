@@ -14,7 +14,7 @@ namespace AddOnConectorSIRE.Entities
         [JsonProperty("U_EXX_PERIODO")] public string UEXXPERIODO { get; set; } //RUC
         [JsonProperty("U_EXX_FECREG")] public string UEXXFECREG { get; set; } //Apellidos y Nombres o Razón social
         [JsonProperty("U_EXX_ARCHTXT")] public string UEXXARCHTXT { get; set; } //Periodo
-        [JsonProperty("U_EXX_SIRE_REGCOM1Collection")] public string EXXSIRECOMP1 { get; set; } //Periodo
+        [JsonProperty("U_EXX_SIRE_COMP1Collection")] public EXXSIRECOMP1 EXXSIRECOMP1 { get; set; } //Periodo
     }
 
     public class EXXSIRECOMP1
@@ -48,7 +48,7 @@ namespace AddOnConectorSIRE.Entities
         [JsonProperty("U_EXX_OTRTRI")] public double? UEXXOTRTRI { get; set; } //Otros Trib/ Cargos
         [JsonProperty("U_EXX_TOTAL")] public double? UEXXTOTAL { get; set; } //Total CP
         [JsonProperty("U_EXX_MONEDA")] public string UEXXMONEDA { get; set; } //Moneda
-        [JsonProperty("U_EXX_TCAMBIO")] public double? UEXXTCAMBIO { get; set; } //Tipo de Cambio
+        [JsonProperty("U_EXX_TCAMBIO")] public string UEXXTCAMBIO { get; set; } //Tipo de Cambio
         [JsonProperty("U_EXX_FEMOD")] public string UEXXFEMOD { get; set; } //Fecha Emisión Doc Modificado
         [JsonProperty("U_EXX_TIPMOD")] public string UEXXTIPMOD { get; set; } //Tipo CP Modificado
         [JsonProperty("U_EXX_SERMOD")] public string UEXXSERMOD { get; set; } //Serie CP Modificado

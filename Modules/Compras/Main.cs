@@ -4,16 +4,14 @@ using Newtonsoft.Json;
 using SAPbouiCOM;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.IO.Compression;
 using Form = SAPbouiCOM.Form;
+using System.Threading;
+using System.Security.Policy;
 
 namespace AddOnConectorSIRE.Modules.Compras
 {
@@ -76,6 +74,8 @@ namespace AddOnConectorSIRE.Modules.Compras
 
                 oForm.Items.Item("sBPLID").Visible = true;
                 oForm.Items.Item("BPLID").Visible = true;
+                oForm.Items.Item("6").Visible = false;
+                oForm.Items.Item("7").Visible = false;
 
                 SetColumnSum(oMatrix, "C_0_18");
                 SetColumnSum(oMatrix, "C_0_19");
@@ -121,6 +121,7 @@ namespace AddOnConectorSIRE.Modules.Compras
                 SAPbouiCOM.ComboBox ocbBPLID = (SAPbouiCOM.ComboBox)oForm.Items.Item("BPLID").Specific;
                 SAPbouiCOM.EditText oetTXT = (SAPbouiCOM.EditText)oForm.Items.Item("ARCHTXT").Specific;
                 SAPbouiCOM.EditText oetSAP = (SAPbouiCOM.EditText)oForm.Items.Item("ARCHSAP").Specific;
+                SAPbouiCOM.EditText oeTicket = (SAPbouiCOM.EditText)oForm.Items.Item("TICKET").Specific;
                 ((SAPbouiCOM.StaticText)oForm.Items.Item("stAmbos").Specific).Caption = "0";
                 ((SAPbouiCOM.StaticText)oForm.Items.Item("stSAP").Specific).Caption = "0";
                 ((SAPbouiCOM.StaticText)oForm.Items.Item("stSIRE").Specific).Caption = "0";
@@ -144,6 +145,37 @@ namespace AddOnConectorSIRE.Modules.Compras
                     ocbBPLID.Item.Enabled = true;
                     oetTXT.Item.Enabled = false;
                     oetSAP.Item.Enabled = false;
+                    oeTicket.Item.Enabled = false;
+                    oForm.Items.Item("ESTADO").Enabled = false;
+                    oForm.Items.Item("5").Visible = true;
+                    oForm.Items.Item("6").Visible = false;
+                    oForm.Items.Item("7").Visible = false;
+
+                    if (Globals.CONF.UEXXVSIR == "1")
+                    {
+                        oForm.Items.Item("sARCHTXT").Visible = true;
+                        oForm.Items.Item("ARCHTXT").Visible = true;
+                        oForm.Items.Item("3").Visible = true;
+                    }
+                    else
+                    {
+                        oForm.Items.Item("sARCHTXT").Visible = false;
+                        oForm.Items.Item("ARCHTXT").Visible = false;
+                        oForm.Items.Item("3").Visible = false;
+                    }
+
+                    if (Globals.CONF.UEXXVSAP == "1")
+                    {
+                        oForm.Items.Item("sARCHSAP").Visible = true;
+                        oForm.Items.Item("ARCHSAP").Visible = true;
+                        oForm.Items.Item("4").Visible = true;
+                    }
+                    else
+                    {
+                        oForm.Items.Item("sARCHSAP").Visible = false;
+                        oForm.Items.Item("ARCHSAP").Visible = false;
+                        oForm.Items.Item("4").Visible = false;
+                    }
 
                     if (oDBDataSource1.Size > 0)
                     {
@@ -162,7 +194,16 @@ namespace AddOnConectorSIRE.Modules.Compras
                     ocbBPLID.Item.Enabled = true;
                     oetTXT.Item.Enabled = true;
                     oetSAP.Item.Enabled = true;
+                    oeTicket.Item.Enabled = true;
+
+                    oForm.Items.Item("sARCHTXT").Visible = true;
+                    oForm.Items.Item("ARCHTXT").Visible = true;
+                    oForm.Items.Item("sARCHSAP").Visible = true;
+                    oForm.Items.Item("ARCHSAP").Visible = true;
+                    oForm.Items.Item("ESTADO").Enabled = true;
+                    oForm.Items.Item("5").Visible = false;
                 }
+
                 oMatrix.AutoResizeColumns();
             }
             catch (Exception ex)
@@ -193,6 +234,47 @@ namespace AddOnConectorSIRE.Modules.Compras
                 SAPbouiCOM.ComboBox ocbBPLID = (SAPbouiCOM.ComboBox)oForm.Items.Item("BPLID").Specific;
                 SAPbouiCOM.EditText oetTXT = (SAPbouiCOM.EditText)oForm.Items.Item("ARCHTXT").Specific;
                 SAPbouiCOM.EditText oetSAP = (SAPbouiCOM.EditText)oForm.Items.Item("ARCHSAP").Specific;
+
+                if (!string.IsNullOrEmpty(oDBDataSource.GetValue("U_EXX_ARCHTXT", 0)))
+                {
+                    oForm.Items.Item("sARCHTXT").Visible = true;
+                    oForm.Items.Item("ARCHTXT").Visible = true;
+                    oForm.Items.Item("6").Visible = false;
+                }
+                else
+                {
+                    string estado = oDBDataSource.GetValue("U_EXX_ESTADO", 0);
+                    oForm.Items.Item("sARCHTXT").Visible = false;
+                    oForm.Items.Item("ARCHTXT").Visible = false;
+
+                    string Cancelado = oDBDataSource.GetValue("Canceled", 0);
+                    if (Cancelado == "Y")
+                    {
+                        oForm.Items.Item("6").Visible = false;
+                        oForm.Items.Item("7").Visible = false;
+                    }
+                    else
+                    {
+                        oForm.Items.Item("6").Visible = estado == "0" ? true : false;
+                        oForm.Items.Item("7").Visible = estado == "1" ? true : false;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(oDBDataSource.GetValue("U_EXX_ARCHSAP", 0)))
+                {
+                    oForm.Items.Item("sARCHSAP").Visible = true;
+                    oForm.Items.Item("ARCHSAP").Visible = true;
+                }
+                else
+                {
+                    oForm.Items.Item("sARCHSAP").Visible = false;
+                    oForm.Items.Item("ARCHSAP").Visible = false;
+                }
+
+                oForm.Items.Item("3").Visible = false;
+                oForm.Items.Item("4").Visible = false;
+                oForm.Items.Item("5").Visible = false;
+
 
                 oetDocEntry.Item.Enabled = false;
                 oetFecha.Item.Enabled = false;
@@ -259,8 +341,8 @@ namespace AddOnConectorSIRE.Modules.Compras
 
                     if (Globals.CONF.UEXXCONS == "1")
                     {
-                        if (Globals.IsHana()) Globals.Query = Properties.Resources.SQL_ValidarTabla;
-                        else Globals.Query = Properties.Resources.SQL_ValidarTabla;
+                        if (Globals.IsHana()) Globals.Query = Properties.Resources.HANA_ValidaExisteRegistroCompra;
+                        else Globals.Query = Properties.Resources.SQL_ValidaExisteRegistroCompra;
 
                         Globals.Query = string.Format(Globals.Query, oDataSource.GetValue("U_EXX_PERIODO", 0), oDataSource.GetValue("U_EXX_BPLID", 0));
                         Globals.RunQuery(Globals.Query);
@@ -338,7 +420,7 @@ namespace AddOnConectorSIRE.Modules.Compras
                         if (string.IsNullOrEmpty(empresa.UEXXAPIS) || string.IsNullOrEmpty(empresa.UEXXUSER) || string.IsNullOrEmpty(empresa.UEXXPASS) || string.IsNullOrEmpty(empresa.UEXXCLID) || string.IsNullOrEmpty(empresa.UEXXCLSE))
                             throw new Exception("La empresa selccionada no tiene la configuración completa por favor revise en: Gestión > EXX - SIRE SUNAT > EXX - Configuración SIRE");
                     }
-                    if (Globals.CONF.UEXXVSIR == "1")
+                    if (Globals.CONF.UEXXVSAP == "1")
                     {
                         if (string.IsNullOrEmpty(ArchivoSAP)) throw new Exception("Primero seleccione el archivo SAP de compras");
                     }
@@ -351,6 +433,7 @@ namespace AddOnConectorSIRE.Modules.Compras
                     string json1 = JsonConvert.SerializeObject(documentosSIRE);
                     string json2 = JsonConvert.SerializeObject(documentosSAP);
 
+                    Globals.InformationMessage("Comparando listas SAP - SIRE");
                     var enAmbos = documentosSAP.Where(sap => documentosSIRE.Any(sire => sap.UEXXRUC == sire.UEXXRUC && sap.UEXXPERIODO == sire.UEXXPERIODO && sap.UEXXTIPDOC == sire.UEXXTIPDOC && sap.UEXXSERIE == sire.UEXXSERIE && sap.UEXXNROINI == sire.UEXXNROINI && sap.UEXXNROFIN == sire.UEXXNROFIN)).Select(sap =>
                     {
                         sap.UEXXORIGEN = 1;
@@ -483,7 +566,8 @@ namespace AddOnConectorSIRE.Modules.Compras
                     });
 
                     oMatrix.AutoResizeColumns();
-                    Globals.SuccessMessage("Carga completada correctamente!");
+                    Globals.SuccessMessage("La carga se completó correctamente!");
+                    Globals.MessageBox("La carga se completó correctamente!");
                 }
             }
             catch (Exception ex)
@@ -511,7 +595,7 @@ namespace AddOnConectorSIRE.Modules.Compras
                 if (Globals.CONF.UEXXVSIR == "1") //Lee desde archivo
                 {
                     string Archivo = ((SAPbouiCOM.EditText)oForm.Items.Item("ARCHTXT").Specific).Value;
-                    Globals.InformationMessage("Leyendo documento, por favor espere...");
+                    Globals.InformationMessage("Leyendo TXT SIRE");
                     list = File.ReadLines(Archivo).Skip(1).Where(l => !string.IsNullOrWhiteSpace(l))
                     .Select(linea =>
                     {
@@ -550,7 +634,7 @@ namespace AddOnConectorSIRE.Modules.Compras
                             UEXXTOTAL = GetDouble(c, 24),
 
                             UEXXMONEDA = GetString(c, 25),
-                            UEXXTCAMBIO = GetDouble(c, 26),
+                            UEXXTCAMBIO = GetString(c, 26),
                             UEXXFEMOD = GetDateString(c, 27),
                             UEXXTIPMOD = GetString(c, 28),
                             UEXXSERMOD = GetString(c, 29),
@@ -610,16 +694,290 @@ namespace AddOnConectorSIRE.Modules.Compras
                 }
                 else
                 {
+                    Globals.InformationMessage("Obteniendo archivo SIRE de Sunat");
+                    string periodo = oPeriodo.Selected.Value.Replace("-", "");
+                    string FechaIni = Convert.ToDateTime(oPeriodo.Selected.Value + "-01").ToString("yyyy-MM-dd");
+                    string FechaFin = Convert.ToDateTime(oPeriodo.Selected.Value + "-01").AddMonths(1).AddDays(-1).ToString("yyyy-MM-dd");
                     //Consulta por API SIRE
+                    string uri = $"/v1/contribuyente/migeigv/libros/rce/propuesta/web/propuesta/{periodo}/exportacioncomprobantepropuesta?codTipoArchivo=0&codOrigenEnvio=2&fecEmisionIni={FechaIni}&fecEmisionFin={FechaFin}"; //&codTipoCDP=01";
+                    var propuesta = SIREAPI.ConsultarDocumento<Propuesta>(oEmpresa.Selected.Value.ToString(), uri);
+
+                    Thread.Sleep(1000);
+                    uri = $"/v1/contribuyente/migeigv/libros/rvierce/gestionprocesosmasivos/web/masivo/consultaestadotickets?perIni={periodo}&perFin={periodo}&page=1&perPage=20&numTicket={propuesta.numTicket}";
+                    int intento = 0;
+                consultaTicket:
+                    intento++;
+                    int seleccion = 0;
+                    string fileName = string.Empty;
+                    byte[] zipBytes = Array.Empty<byte>();
+                    var ticket = SIREAPI.ConsultarDocumento<Ticket>(oEmpresa.Selected.Value.ToString(), uri);
+                    if (ticket.Registros[0].ArchivoReporte == null)
+                    {
+                        if (intento > 3)
+                        {
+                            Globals.InformationMessage("No se logró obtener respuesta SUNAT");
+                            if (Globals.IsHana()) Globals.Query = Properties.Resources.HANA_ConsultaExisteLog;
+                            else Globals.Query = Properties.Resources.SQL_ConsultaExisteLog;
+                            Globals.Query = string.Format(Globals.Query, 0, oEmpresa.Selected.Value.ToString(), FechaIni.Substring(0, 7));
+                            Globals.RunQuery(Globals.Query);
+                            if (Globals.oRec.RecordCount > 0)
+                            {
+                                seleccion = Globals.SBO_Application.MessageBox($"Se encontró un log para el período {FechaIni.Substring(0, 7)} consultado el día {Globals.oRec.Fields.Item("U_EXX_DATE").Value.ToString().Substring(0, 10)}. ¿Desea continuar el proceso con este archivo?", 1, "Ok", "Cancel");
+                                if (seleccion == 1)
+                                {
+                                    fileName = Globals.oRec.Fields.Item("U_EXX_ARCHTXT").Value.ToString();
+                                    zipBytes = Convert.FromBase64String(Globals.oRec.Fields.Item("U_EXX_CONTENIDO").Value.ToString());
+                                    goto TrabajoConLog;
+                                }
+                                else throw new Exception("Operación cancelada");
+                            }
+                        }
+                        goto consultaTicket;
+                    }
+                    if (ticket.Registros[0].ArchivoReporte.Count == 0)
+                        goto consultaTicket;
+
+                    if (seleccion == 0)
+                    {
+                        uri = $"/v1/contribuyente/migeigv/libros/rvierce/gestionprocesosmasivos/web/masivo/archivoreporte?nomArchivoReporte={ticket.Registros[0].ArchivoReporte[0].NomArchivoReporte}&codTipoAchivoReporte={ticket.Registros[0].ArchivoReporte[0].CodTipoAchivoReporte}&perTributario={periodo}&codProceso={ticket.Registros[0].CodProceso}&numTicket={propuesta.numTicket}";
+                        zipBytes = SIREAPI.ConsultarDocumento<byte[]>(oEmpresa.Selected.Value.ToString(), uri);
+                    }
+
+                TrabajoConLog:
 
 
+                    #region Consulta excluidos
+                    //Consulta por API SIRE
+                    //uri = $"/v1/contribuyente/migeigv/libros/rce/propuesta/web/excluidos/{periodo}/exportaexcluidos?codTipoArchivo=0&codOrigenEnvio=2&fecEmisionIni={FechaIni}&fecEmisionFin={FechaFin}&codTipoCDP=01&"; //&codTipoCDP=01";
+                    uri = $"/v1/contribuyente/migeigv/libros/rce/propuesta/web/excluidos/{periodo}/exportaexcluidos?codTipoArchivo=0&codOrigenEnvio=2"; // &codTipoCDP=01"; //&codTipoCDP=01";
+                    var excluidos= SIREAPI.ConsultarDocumento<Propuesta>(oEmpresa.Selected.Value.ToString(), uri);
+
+                    Thread.Sleep(1000);
+                    uri = $"/v1/contribuyente/migeigv/libros/rvierce/gestionprocesosmasivos/web/masivo/consultaestadotickets?perIni={periodo}&perFin={periodo}&page=1&perPage=20&numTicket={excluidos.numTicket}";
+                    var ticketExc = SIREAPI.ConsultarDocumento<Ticket>(oEmpresa.Selected.Value.ToString(), uri);
+
+                    uri = $"/v1/contribuyente/migeigv/libros/rvierce/gestionprocesosmasivos/web/masivo/archivoreporte?nomArchivoReporte={ticketExc.Registros[0].ArchivoReporte[0].NomArchivoReporte}&codTipoAchivoReporte={ticketExc.Registros[0].ArchivoReporte[0].CodTipoAchivoReporte}&perTributario={periodo}&codProceso={ticketExc.Registros[0].CodProceso}&numTicket={excluidos.numTicket}";
+                    var zipBytesExc = SIREAPI.ConsultarDocumento<byte[]>(oEmpresa.Selected.Value.ToString(), uri);
+                    #endregion
+
+                    //Guardar archivo
+                    string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                    string folderPath = Path.Combine(documentsPath, Globals.AddOnName, Globals.oCompany.CompanyDB, "PROPUESTA", "COMPRAS");
+                    if (string.IsNullOrEmpty(fileName)) fileName = ticket.Registros[0].ArchivoReporte[0].NomArchivoReporte;
+                    string fullPath = Path.Combine(folderPath, fileName); 
+                    
+                    var zipBytesFinal = UnirRespuestasSireEnBytes(zipBytes, zipBytesExc, fileName.Replace("zip", "txt")); 
+
+                    if (!Directory.Exists(folderPath))
+                        Directory.CreateDirectory(folderPath);
+
+                    File.WriteAllBytes(fullPath, zipBytesFinal);
+                    Globals.InformationMessage($"Archivo ZIP de Sunat guardado en: {fullPath}");
+
+                    using (var ms = new MemoryStream(zipBytesFinal))
+                    using (var zip = new ZipArchive(ms, ZipArchiveMode.Read))
+                    {
+                        foreach (var entry in zip.Entries)
+                        {
+                            // Solo archivos .txt o .csv (según tu caso)
+                            if (entry.Name.EndsWith(".txt"))
+                            {
+                                using (var entryStream = entry.Open())
+                                using (var reader = new StreamReader(entryStream, Encoding.UTF8))
+                                {
+                                    string contenidoTxt = reader.ReadToEnd();
+                                    list = contenidoTxt.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None).Skip(1).Where(l => !string.IsNullOrWhiteSpace(l))
+                                    .Select(linea =>
+                                    {
+                                        var c = linea.Split('|');
+                                        return new EXXSIRECOMP1
+                                        {
+                                            UEXXORIGEN = 3,
+                                            UEXXOBJTYPE = string.Empty,
+                                            UEXXDOCENTRY = string.Empty,
+                                            UEXXRUC = GetString(c, 0),
+                                            UEXXRAZSOC = GetString(c, 1),
+                                            UEXXPERIODO = GetString(c, 2),
+                                            UEXXCARSUN = GetString(c, 3),
+                                            UEXXFEMI = GetDateString(c, 4),
+                                            UEXXFVCTO = GetDateString(c, 5),
+                                            UEXXTIPDOC = GetString(c, 6),
+                                            UEXXSERIE = GetString(c, 7),
+                                            UEXXANIO = GetString(c, 8),
+
+                                            UEXXNROINI = GetString(c, 9),
+                                            UEXXNROFIN = GetString(c, 10),
+                                            UEXXTIPIDE = GetString(c, 11),
+                                            UEXXNUMIDE = GetString(c, 12),
+                                            UEXXRAZCLI = GetString(c, 13),
+
+                                            UEXXBIGDG = GetDouble(c, 14),
+                                            UEXXIGVDG = GetDouble(c, 15),
+                                            UEXXBIGDGN = GetDouble(c, 16),
+                                            UEXXIGVDGN = GetDouble(c, 17),
+                                            UEXXBIDNG = GetDouble(c, 18),
+                                            UEXXIGVDNG = GetDouble(c, 19),
+                                            UEXXVALNG = GetDouble(c, 20),
+                                            UEXXISC = GetDouble(c, 21),
+                                            UEXXICBPER = GetDouble(c, 22),
+                                            UEXXOTRTRI = GetDouble(c, 23),
+                                            UEXXTOTAL = GetDouble(c, 24),
+
+                                            UEXXMONEDA = GetString(c, 25),
+                                            UEXXTCAMBIO = GetString(c, 26),
+                                            UEXXFEMOD = GetDateString(c, 27),
+                                            UEXXTIPMOD = GetString(c, 28),
+                                            UEXXSERMOD = GetString(c, 29),
+                                            UEXXCODDAM = GetString(c, 30),
+                                            UEXXNUMMOD = GetString(c, 31),
+                                            UEXXCLASIF = GetString(c, 32),
+                                            UEXXIDPROY = GetString(c, 33),
+                                            UEXXPORPAR = GetDouble(c, 34),
+                                            UEXXIMB = GetDouble(c, 35),
+                                            UEXXCARORI = GetString(c, 36),
+                                            UEXXDETRA = GetDouble(c, 37),
+                                            UEXXTIPNOT = GetString(c, 38),
+                                            UEXXESTCOM = GetString(c, 39),
+                                            UEXXINCAL = GetString(c, 40),
+
+                                            UEXXCLU1 = GetString(c, 41),
+                                            UEXXCLU2 = GetString(c, 42),
+                                            UEXXCLU3 = GetString(c, 43),
+                                            UEXXCLU4 = GetString(c, 44),
+                                            UEXXCLU5 = GetString(c, 45),
+                                            UEXXCLU6 = GetString(c, 46),
+                                            UEXXCLU7 = GetString(c, 47),
+                                            UEXXCLU8 = GetString(c, 48),
+                                            UEXXCLU9 = GetString(c, 49),
+                                            UEXXCLU10 = GetString(c, 50),
+                                            UEXXCLU11 = GetString(c, 51),
+                                            UEXXCLU12 = GetString(c, 52),
+                                            UEXXCLU13 = GetString(c, 53),
+                                            UEXXCLU14 = GetString(c, 54),
+                                            UEXXCLU15 = GetString(c, 55),
+                                            UEXXCLU16 = GetString(c, 56),
+                                            UEXXCLU17 = GetString(c, 57),
+                                            UEXXCLU18 = GetString(c, 58),
+                                            UEXXCLU19 = GetString(c, 59),
+                                            UEXXCLU20 = GetString(c, 60),
+                                            UEXXCLU21 = GetString(c, 61),
+                                            UEXXCLU22 = GetString(c, 62),
+                                            UEXXCLU23 = GetString(c, 63),
+                                            UEXXCLU24 = GetString(c, 64),
+                                            UEXXCLU25 = GetString(c, 65),
+                                            UEXXCLU26 = GetString(c, 66),
+                                            UEXXCLU27 = GetString(c, 67),
+                                            UEXXCLU28 = GetString(c, 68),
+                                            UEXXCLU29 = GetString(c, 69),
+                                            UEXXCLU30 = GetString(c, 70),
+                                            UEXXCLU31 = GetString(c, 71),
+                                            UEXXCLU32 = GetString(c, 72),
+                                            UEXXCLU33 = GetString(c, 73),
+                                            UEXXCLU34 = GetString(c, 74),
+                                            UEXXCLU35 = GetString(c, 75),
+                                            UEXXCLU36 = GetString(c, 76),
+                                            UEXXCLU37 = GetString(c, 77),
+                                            UEXXCLU38 = GetString(c, 78),
+                                            UEXXCLU39 = GetString(c, 79)
+                                        };
+                                    }).ToList();
+                                }
+                            }
+                        }
+                    }
                 }
                 return list;
             }
             catch (Exception ex)
             {
+                if (ex.Message.Contains("503") && ex.Message.Contains("Unavailable"))
+                    throw new Exception("503: El Servicio  no esta disponible por el momento");
                 throw ex;
             }
+        }
+
+        public static byte[] UnirRespuestasSireEnBytes(byte[] zipBytesPropuesta, byte[] zipBytesExcluidos, string nombreArchivoTxt)
+        {
+            // 1. Extraer el contenido de texto de ambos ZIPs en memoria
+            string contenidoPropuesta = ExtraerTextoDeZipBytes(zipBytesPropuesta);
+            string contenidoExcluidos = ExtraerTextoDeZipBytes(zipBytesExcluidos);
+
+            // 2. Retirar la primera fila del archivo de excluidos
+            if (!string.IsNullOrEmpty(contenidoExcluidos))
+            {
+                int posicionSaltoLinea = contenidoExcluidos.IndexOf('\n');
+
+                if (posicionSaltoLinea >= 0)
+                {
+                    contenidoExcluidos = contenidoExcluidos.Substring(posicionSaltoLinea + 1);
+                }
+                else
+                {
+                    // Si solo existe una fila, queda vacío
+                    contenidoExcluidos = string.Empty;
+                }
+            }
+
+            // 3. Concatenar los textos asegurando un salto de línea entre ambos
+            StringBuilder sbFinal = new StringBuilder();
+
+            if (!string.IsNullOrWhiteSpace(contenidoPropuesta))
+            {
+                sbFinal.Append(contenidoPropuesta.TrimEnd());
+            }
+
+            if (!string.IsNullOrWhiteSpace(contenidoExcluidos))
+            {
+                if (sbFinal.Length > 0)
+                {
+                    sbFinal.AppendLine();
+                }
+
+                sbFinal.Append(contenidoExcluidos.TrimEnd());
+            }
+
+            string textoUnificado = sbFinal.ToString();
+
+            using (MemoryStream outputZipStream = new MemoryStream())
+            {
+                using (ZipArchive zipArchive = new ZipArchive(outputZipStream, ZipArchiveMode.Create, true))
+                {
+                    ZipArchiveEntry entry = zipArchive.CreateEntry(nombreArchivoTxt);
+
+                    using (Stream entryStream = entry.Open())
+                    using (StreamWriter writer = new StreamWriter(entryStream, Encoding.GetEncoding("ISO-8859-1")))
+                    {
+                        writer.Write(textoUnificado);
+                    }
+                }
+
+                return outputZipStream.ToArray();
+            }
+        }
+
+        private static string ExtraerTextoDeZipBytes(byte[] zipBytes)
+        {
+            if (zipBytes == null || zipBytes.Length == 0)
+                return string.Empty;
+
+            using (MemoryStream ms = new MemoryStream(zipBytes))
+            using (ZipArchive archive = new ZipArchive(ms, ZipArchiveMode.Read))
+            {
+                // SIRE devuelve un único archivo de texto dentro del zip
+                foreach (ZipArchiveEntry entry in archive.Entries)
+                {
+                    if (entry.FullName.EndsWith(".txt", StringComparison.OrdinalIgnoreCase) ||
+                        entry.FullName.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
+                    {
+                        using (Stream stream = entry.Open())
+                        using (StreamReader reader = new StreamReader(stream, Encoding.GetEncoding("ISO-8859-1")))
+                        {
+                            return reader.ReadToEnd();
+                        }
+                    }
+                }
+            }
+            return string.Empty;
         }
 
         public static List<EXXSIRECOMP1> ConsultaRegistroSAP(ItemEvent pVal, Form oForm)
@@ -633,15 +991,14 @@ namespace AddOnConectorSIRE.Modules.Compras
                 if (Globals.CONF.UEXXVSAP == "1")
                 {
                     string Archivo = ((SAPbouiCOM.EditText)oForm.Items.Item("ARCHSAP").Specific).Value;
-                    Globals.InformationMessage("Leyendo documento, por favor espere...");
-                    list = File.ReadLines(Archivo).Skip(1).Where(l => !string.IsNullOrWhiteSpace(l))
+                    Globals.InformationMessage("Leyendo TXT SAP");
+                    list = File.ReadLines(Archivo).Where(l => !string.IsNullOrWhiteSpace(l))
                     .Select(linea =>
                     {
                         var c = linea.Split('|');
-
                         string ObjType = string.Empty, DocEntry = string.Empty;
-                        if (Globals.IsHana()) Globals.Query = Properties.Resources.HANA_ObtieneLlavesDocumentos;
-                        else Globals.Query = Properties.Resources.SQL_ObtieneLlavesDocumentos;
+                        if (Globals.IsHana()) Globals.Query = Properties.Resources.HANA_ObtieneLlavesDocumentosCompra;
+                        else Globals.Query = Properties.Resources.SQL_ObtieneLlavesDocumentosCompra;
                         Globals.Query = string.Format(Globals.Query, oEmpresa.Selected.Value, GetString(c, 12), GetString(c, 6), GetString(c, 7), GetString(c, 9));  //RUC - TIPO - SERIE - CORRELATIVO
                         Globals.RunQuery(Globals.Query);
                         Globals.oRec.MoveFirst();
@@ -686,7 +1043,7 @@ namespace AddOnConectorSIRE.Modules.Compras
                             UEXXTOTAL = GetDouble(c, 24),
 
                             UEXXMONEDA = GetString(c, 25),
-                            UEXXTCAMBIO = GetDouble(c, 26),
+                            UEXXTCAMBIO = GetString(c, 26),
                             UEXXFEMOD = GetDateString(c, 27),
                             UEXXTIPMOD = GetString(c, 28),
                             UEXXSERMOD = GetString(c, 29),
@@ -746,8 +1103,14 @@ namespace AddOnConectorSIRE.Modules.Compras
                 }
                 else
                 {
-                    //Cambiar por el prodimiento que desarrollará B1 agregar filtro periodo y empresa
-                    Globals.Query = "CALL \"EXX_SIRE_REGCOM\"('2024')";
+                    Globals.InformationMessage("Obteniendo lista de documentos SAP");
+                    string FechaIni = Convert.ToDateTime(oPeriodo.Selected.Value + "-01").ToString("yyyyMMdd");
+                    string FechaFin = Convert.ToDateTime(oPeriodo.Selected.Value + "-01").AddMonths(1).AddDays(-1).ToString("yyyyMMdd");
+                    if (Globals.IsHana())
+                        Globals.Query = $"CALL \"SBO_EXX_LE_0801_REGISTRODECOMPRAS_ANEXOS_11\"('{FechaIni}', '{FechaFin}', 'N', '{oEmpresa.Selected.Value}')";
+                    else
+                        Globals.Query = $"EXEC \"SBO_EXX_LE_0801_REGISTRODECOMPRAS_ANEXOS_11\" '{FechaIni}', '{FechaFin}', 'N', '{oEmpresa.Selected.Value}'";
+
                     Globals.RunQuery(Globals.Query);
                     Globals.oRec.MoveFirst();
 
@@ -760,90 +1123,90 @@ namespace AddOnConectorSIRE.Modules.Compras
                                 UEXXORIGEN = 2,
                                 UEXXOBJTYPE = Globals.oRec.Fields.Item("ObjType").Value?.ToString(),
                                 UEXXDOCENTRY = Globals.oRec.Fields.Item("DocEntry").Value?.ToString(),
-                                UEXXRUC = Globals.oRec.Fields.Item("U_EXX_RUC").Value?.ToString(),
-                                UEXXRAZSOC = Globals.oRec.Fields.Item("U_EXX_RAZSOC").Value?.ToString(),
-                                UEXXPERIODO = Globals.oRec.Fields.Item("U_EXX_PERIODO").Value?.ToString(),
-                                UEXXCARSUN = Globals.oRec.Fields.Item("U_EXX_CARSUN").Value?.ToString(),
-                                UEXXFEMI = Globals.oRec.Fields.Item("U_EXX_FEMI").Value?.ToString(),
-                                UEXXFVCTO = Globals.oRec.Fields.Item("U_EXX_FVCTO").Value?.ToString(),
-                                UEXXTIPDOC = Globals.oRec.Fields.Item("U_EXX_TIPDOC").Value?.ToString(),
-                                UEXXSERIE = Globals.oRec.Fields.Item("U_EXX_SERIE").Value?.ToString(),
-                                UEXXANIO = Globals.oRec.Fields.Item("U_EXX_ANIO").Value?.ToString(),
+                                UEXXRUC = Globals.oRec.Fields.Item("BPE_RUC").Value?.ToString(),
+                                UEXXRAZSOC = Globals.oRec.Fields.Item("BPE_ApellidosyNombresoRazonsocial").Value?.ToString(),
+                                UEXXPERIODO = Globals.oRec.Fields.Item("BPE_Periodo").Value?.ToString(),
+                                UEXXCARSUN = Globals.oRec.Fields.Item("BPE_CARSUNAT").Value?.ToString(),
+                                UEXXFEMI = string.IsNullOrEmpty(Globals.oRec.Fields.Item("BPE_Fechadeemision").Value?.ToString()) ? "" : Convert.ToDateTime(Globals.oRec.Fields.Item("BPE_Fechadeemision").Value?.ToString()).ToString("yyyyMMdd"),
+                                UEXXFVCTO = string.IsNullOrEmpty(Globals.oRec.Fields.Item("BPE_FechaVctoPago").Value?.ToString()) ? "" : Convert.ToDateTime(Globals.oRec.Fields.Item("BPE_FechaVctoPago").Value?.ToString()).ToString("yyyyMMdd"),
+                                UEXXTIPDOC = Globals.oRec.Fields.Item("BPE_TipoCPDoc").Value?.ToString(),
+                                UEXXSERIE = Globals.oRec.Fields.Item("BPE_SeriedelCDP").Value?.ToString(),
+                                UEXXANIO = Globals.oRec.Fields.Item("BPE_Ano").Value?.ToString(),
 
-                                UEXXNROINI = Globals.oRec.Fields.Item("U_EXX_NROINI").Value?.ToString(),
-                                UEXXNROFIN = Globals.oRec.Fields.Item("U_EXX_NROFIN").Value?.ToString(),
-                                UEXXTIPIDE = Globals.oRec.Fields.Item("U_EXX_TIPIDE").Value?.ToString(),
-                                UEXXNUMIDE = Globals.oRec.Fields.Item("U_EXX_NUMIDE").Value?.ToString(),
-                                UEXXRAZCLI = Globals.oRec.Fields.Item("U_EXX_RAZCLI").Value?.ToString(),
+                                UEXXNROINI = Globals.oRec.Fields.Item("BPE_NroCPoDocNroInicialRango").Value?.ToString(),
+                                UEXXNROFIN = Globals.oRec.Fields.Item("BPE_NroFinalRango").Value?.ToString(),
+                                UEXXTIPIDE = Globals.oRec.Fields.Item("BPE_TipoDocIdentidad").Value?.ToString(),
+                                UEXXNUMIDE = Globals.oRec.Fields.Item("BPE_NroDocIdentidad").Value?.ToString(),
+                                UEXXRAZCLI = Globals.oRec.Fields.Item("BPE_ApellidosNombresRazonSocial").Value?.ToString(),
 
-                                UEXXBIGDG = Convert.ToDouble(Globals.oRec.Fields.Item("U_EXX_BIGDG").Value ?? 0.00),
-                                UEXXIGVDG = Convert.ToDouble(Globals.oRec.Fields.Item("U_EXX_IGVDG").Value ?? 0.00),
-                                UEXXBIGDGN = Convert.ToDouble(Globals.oRec.Fields.Item("U_EXX_BIGDGN").Value ?? 0.00),
-                                UEXXIGVDGN = Convert.ToDouble(Globals.oRec.Fields.Item("U_EXX_IGVDGN").Value ?? 0.00),
-                                UEXXBIDNG = Convert.ToDouble(Globals.oRec.Fields.Item("U_EXX_BIDNG").Value ?? 0.00),
-                                UEXXIGVDNG = Convert.ToDouble(Globals.oRec.Fields.Item("U_EXX_IGVDNG").Value ?? 0.00),
-                                UEXXVALNG = Convert.ToDouble(Globals.oRec.Fields.Item("U_EXX_VALNG").Value ?? 0.00),
-                                UEXXISC = Convert.ToDouble(Globals.oRec.Fields.Item("U_EXX_ISC").Value ?? 0.00),
-                                UEXXICBPER = Convert.ToDouble(Globals.oRec.Fields.Item("U_EXX_ICBPER").Value ?? 0.00),
-                                UEXXOTRTRI = Convert.ToDouble(Globals.oRec.Fields.Item("U_EXX_OTRTRI").Value ?? 0.00),
-                                UEXXTOTAL = Convert.ToDouble(Globals.oRec.Fields.Item("U_EXX_TOTAL").Value ?? 0.00),
+                                UEXXBIGDG = Convert.ToDouble(Globals.oRec.Fields.Item("BPE_BIGravadoDG").Value ?? 0.00),
+                                UEXXIGVDG = Convert.ToDouble(Globals.oRec.Fields.Item("BPE_IGVIPMDG").Value ?? 0.00),
+                                UEXXBIGDGN = Convert.ToDouble(Globals.oRec.Fields.Item("BPE_BIGravadoDGNG").Value ?? 0.00),
+                                UEXXIGVDGN = Convert.ToDouble(Globals.oRec.Fields.Item("BPE_IGVIPMDGNG").Value ?? 0.00),
+                                UEXXBIDNG = Convert.ToDouble(Globals.oRec.Fields.Item("BPE_BIGravadoDNG").Value ?? 0.00),
+                                UEXXIGVDNG = Convert.ToDouble(Globals.oRec.Fields.Item("BPE_IGVIPMDNG").Value ?? 0.00),
+                                UEXXVALNG = Convert.ToDouble(Globals.oRec.Fields.Item("BPE_ValorAdqNG").Value ?? 0.00),
+                                UEXXISC = Convert.ToDouble(Globals.oRec.Fields.Item("BPE_ISC").Value ?? 0.00),
+                                UEXXICBPER = Convert.ToDouble(Globals.oRec.Fields.Item("BPE_ICBPER").Value ?? 0.00),
+                                UEXXOTRTRI = Convert.ToDouble(Globals.oRec.Fields.Item("BPE_OtrosTribCargos").Value ?? 0.00),
+                                UEXXTOTAL = Convert.ToDouble(Globals.oRec.Fields.Item("BPE_TotalCP").Value ?? 0.00),
 
-                                UEXXMONEDA = Globals.oRec.Fields.Item("U_EXX_MONEDA").Value?.ToString(),
-                                UEXXTCAMBIO = Convert.ToDouble(Globals.oRec.Fields.Item("U_EXX_TCAMBIO").Value ?? 0.00),
-                                UEXXFEMOD = Globals.oRec.Fields.Item("U_EXX_FEMOD").Value?.ToString(),
-                                UEXXTIPMOD = Globals.oRec.Fields.Item("U_EXX_TIPMOD").Value?.ToString(),
-                                UEXXSERMOD = Globals.oRec.Fields.Item("U_EXX_SERMOD").Value?.ToString(),
-                                UEXXCODDAM = Globals.oRec.Fields.Item("U_EXX_CODDAM").Value?.ToString(),
-                                UEXXNUMMOD = Globals.oRec.Fields.Item("U_EXX_NUMMOD").Value?.ToString(),
-                                UEXXCLASIF = Globals.oRec.Fields.Item("U_EXX_CLASIF").Value?.ToString(),
-                                UEXXIDPROY = Globals.oRec.Fields.Item("U_EXX_IDPROY").Value?.ToString(),
-                                UEXXPORPAR = Convert.ToDouble(Globals.oRec.Fields.Item("U_EXX_PORPAR").Value ?? 0.0),
-                                UEXXIMB = Convert.ToDouble(Globals.oRec.Fields.Item("U_EXX_IMB").Value ?? 0.00),
-                                UEXXCARORI = Globals.oRec.Fields.Item("U_EXX_CARORI").Value?.ToString(),
-                                UEXXDETRA = Convert.ToDouble(Globals.oRec.Fields.Item("U_EXX_DETRA").Value ?? 0.00),
-                                UEXXTIPNOT = Globals.oRec.Fields.Item("U_EXX_TIPNOT").Value?.ToString(),
-                                UEXXESTCOM = Globals.oRec.Fields.Item("U_EXX_ESTCOM").Value?.ToString(),
-                                UEXXINCAL = Globals.oRec.Fields.Item("U_EXX_INCAL").Value?.ToString(),
+                                UEXXMONEDA = Globals.oRec.Fields.Item("BPE_Moneda").Value?.ToString(),
+                                UEXXTCAMBIO = string.IsNullOrEmpty(Globals.oRec.Fields.Item("BPE_TipodeCambio").Value?.ToString()) ? "" : Convert.ToDouble(Globals.oRec.Fields.Item("BPE_TipodeCambio").Value ?? 0.000).ToString("0.000"),
+                                UEXXFEMOD = string.IsNullOrEmpty(Globals.oRec.Fields.Item("BPE_FechaEmisionDocModificado").Value?.ToString()) ? "" : Convert.ToDateTime(Globals.oRec.Fields.Item("BPE_FechaEmisionDocModificado").Value?.ToString()).ToString("yyyyMMdd"),
+                                UEXXTIPMOD = Globals.oRec.Fields.Item("BPE_TipoCPModificado").Value?.ToString(),
+                                UEXXSERMOD = Globals.oRec.Fields.Item("BPE_SerieCPModificado").Value?.ToString(),
+                                UEXXCODDAM = Globals.oRec.Fields.Item("BPE_CODDAMODSI").Value?.ToString(),
+                                UEXXNUMMOD = Globals.oRec.Fields.Item("BPE_NroCPModificado").Value?.ToString(),
+                                UEXXCLASIF = Globals.oRec.Fields.Item("BPE_ClasifdeBssySss").Value?.ToString(),
+                                UEXXIDPROY = Globals.oRec.Fields.Item("BPE_IDProyectoOperadores").Value?.ToString(),
+                                UEXXPORPAR = Convert.ToDouble(Globals.oRec.Fields.Item("BPE_PorcPart").Value ?? 0.0),
+                                UEXXIMB = Convert.ToDouble(Globals.oRec.Fields.Item("BPE_IMB").Value ?? 0.00),
+                                UEXXCARORI = Globals.oRec.Fields.Item("BPE_CAROrigIndEoI").Value?.ToString(),
+                                UEXXDETRA = 0, //Convert.ToDouble(Globals.oRec.Fields.Item("U_EXX_DETRA").Value ?? 0.00),
+                                UEXXTIPNOT = string.Empty, //Globals.oRec.Fields.Item("U_EXX_TIPNOT").Value?.ToString(),
+                                UEXXESTCOM = string.Empty, //Globals.oRec.Fields.Item("U_EXX_ESTCOM").Value?.ToString(),
+                                UEXXINCAL = string.Empty, //Globals.oRec.Fields.Item("U_EXX_INCAL").Value?.ToString(),
 
-                                UEXXCLU1 = Globals.oRec.Fields.Item("U_EXX_CLU1").Value?.ToString(),
-                                UEXXCLU2 = Globals.oRec.Fields.Item("U_EXX_CLU2").Value?.ToString(),
-                                UEXXCLU3 = Globals.oRec.Fields.Item("U_EXX_CLU3").Value?.ToString(),
-                                UEXXCLU4 = Globals.oRec.Fields.Item("U_EXX_CLU4").Value?.ToString(),
-                                UEXXCLU5 = Globals.oRec.Fields.Item("U_EXX_CLU5").Value?.ToString(),
-                                UEXXCLU6 = Globals.oRec.Fields.Item("U_EXX_CLU6").Value?.ToString(),
-                                UEXXCLU7 = Globals.oRec.Fields.Item("U_EXX_CLU7").Value?.ToString(),
-                                UEXXCLU8 = Globals.oRec.Fields.Item("U_EXX_CLU8").Value?.ToString(),
-                                UEXXCLU9 = Globals.oRec.Fields.Item("U_EXX_CLU9").Value?.ToString(),
-                                UEXXCLU10 = Globals.oRec.Fields.Item("U_EXX_CLU10").Value?.ToString(),
-                                UEXXCLU11 = Globals.oRec.Fields.Item("U_EXX_CLU11").Value?.ToString(),
-                                UEXXCLU12 = Globals.oRec.Fields.Item("U_EXX_CLU12").Value?.ToString(),
-                                UEXXCLU13 = Globals.oRec.Fields.Item("U_EXX_CLU13").Value?.ToString(),
-                                UEXXCLU14 = Globals.oRec.Fields.Item("U_EXX_CLU14").Value?.ToString(),
-                                UEXXCLU15 = Globals.oRec.Fields.Item("U_EXX_CLU15").Value?.ToString(),
-                                UEXXCLU16 = Globals.oRec.Fields.Item("U_EXX_CLU16").Value?.ToString(),
-                                UEXXCLU17 = Globals.oRec.Fields.Item("U_EXX_CLU17").Value?.ToString(),
-                                UEXXCLU18 = Globals.oRec.Fields.Item("U_EXX_CLU18").Value?.ToString(),
-                                UEXXCLU19 = Globals.oRec.Fields.Item("U_EXX_CLU19").Value?.ToString(),
-                                UEXXCLU20 = Globals.oRec.Fields.Item("U_EXX_CLU20").Value?.ToString(),
-                                UEXXCLU21 = Globals.oRec.Fields.Item("U_EXX_CLU21").Value?.ToString(),
-                                UEXXCLU22 = Globals.oRec.Fields.Item("U_EXX_CLU22").Value?.ToString(),
-                                UEXXCLU23 = Globals.oRec.Fields.Item("U_EXX_CLU23").Value?.ToString(),
-                                UEXXCLU24 = Globals.oRec.Fields.Item("U_EXX_CLU24").Value?.ToString(),
-                                UEXXCLU25 = Globals.oRec.Fields.Item("U_EXX_CLU25").Value?.ToString(),
-                                UEXXCLU26 = Globals.oRec.Fields.Item("U_EXX_CLU26").Value?.ToString(),
-                                UEXXCLU27 = Globals.oRec.Fields.Item("U_EXX_CLU27").Value?.ToString(),
-                                UEXXCLU28 = Globals.oRec.Fields.Item("U_EXX_CLU28").Value?.ToString(),
-                                UEXXCLU29 = Globals.oRec.Fields.Item("U_EXX_CLU29").Value?.ToString(),
-                                UEXXCLU30 = Globals.oRec.Fields.Item("U_EXX_CLU30").Value?.ToString(),
-                                UEXXCLU31 = Globals.oRec.Fields.Item("U_EXX_CLU31").Value?.ToString(),
-                                UEXXCLU32 = Globals.oRec.Fields.Item("U_EXX_CLU32").Value?.ToString(),
-                                UEXXCLU33 = Globals.oRec.Fields.Item("U_EXX_CLU33").Value?.ToString(),
-                                UEXXCLU34 = Globals.oRec.Fields.Item("U_EXX_CLU34").Value?.ToString(),
-                                UEXXCLU35 = Globals.oRec.Fields.Item("U_EXX_CLU35").Value?.ToString(),
-                                UEXXCLU36 = Globals.oRec.Fields.Item("U_EXX_CLU36").Value?.ToString(),
-                                UEXXCLU37 = Globals.oRec.Fields.Item("U_EXX_CLU37").Value?.ToString(),
-                                UEXXCLU38 = Globals.oRec.Fields.Item("U_EXX_CLU38").Value?.ToString(),
-                                UEXXCLU39 = Globals.oRec.Fields.Item("U_EXX_CLU39").Value?.ToString()
+                                UEXXCLU1 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU1").Value?.ToString(),
+                                UEXXCLU2 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU2").Value?.ToString(),
+                                UEXXCLU3 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU3").Value?.ToString(),
+                                UEXXCLU4 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU4").Value?.ToString(),
+                                UEXXCLU5 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU5").Value?.ToString(),
+                                UEXXCLU6 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU6").Value?.ToString(),
+                                UEXXCLU7 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU7").Value?.ToString(),
+                                UEXXCLU8 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU8").Value?.ToString(),
+                                UEXXCLU9 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU9").Value?.ToString(),
+                                UEXXCLU10 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU10").Value?.ToString(),
+                                UEXXCLU11 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU11").Value?.ToString(),
+                                UEXXCLU12 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU12").Value?.ToString(),
+                                UEXXCLU13 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU13").Value?.ToString(),
+                                UEXXCLU14 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU14").Value?.ToString(),
+                                UEXXCLU15 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU15").Value?.ToString(),
+                                UEXXCLU16 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU16").Value?.ToString(),
+                                UEXXCLU17 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU17").Value?.ToString(),
+                                UEXXCLU18 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU18").Value?.ToString(),
+                                UEXXCLU19 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU19").Value?.ToString(),
+                                UEXXCLU20 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU20").Value?.ToString(),
+                                UEXXCLU21 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU21").Value?.ToString(),
+                                UEXXCLU22 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU22").Value?.ToString(),
+                                UEXXCLU23 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU23").Value?.ToString(),
+                                UEXXCLU24 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU24").Value?.ToString(),
+                                UEXXCLU25 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU25").Value?.ToString(),
+                                UEXXCLU26 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU26").Value?.ToString(),
+                                UEXXCLU27 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU27").Value?.ToString(),
+                                UEXXCLU28 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU28").Value?.ToString(),
+                                UEXXCLU29 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU29").Value?.ToString(),
+                                UEXXCLU30 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU30").Value?.ToString(),
+                                UEXXCLU31 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU31").Value?.ToString(),
+                                UEXXCLU32 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU32").Value?.ToString(),
+                                UEXXCLU33 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU33").Value?.ToString(),
+                                UEXXCLU34 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU34").Value?.ToString(),
+                                UEXXCLU35 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU35").Value?.ToString(),
+                                UEXXCLU36 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU36").Value?.ToString(),
+                                UEXXCLU37 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU37").Value?.ToString(),
+                                UEXXCLU38 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU38").Value?.ToString(),
+                                UEXXCLU39 = string.Empty, //Globals.oRec.Fields.Item("U_EXX_CLU39").Value?.ToString()
                             });
 
                             Globals.oRec.MoveNext();
@@ -871,7 +1234,11 @@ namespace AddOnConectorSIRE.Modules.Compras
 
             double valor;
 
-            if (double.TryParse(c[index], NumberStyles.Any, CultureInfo.InvariantCulture, out valor))
+            var style = NumberStyles.AllowLeadingSign |
+                NumberStyles.AllowDecimalPoint |
+                NumberStyles.AllowThousands;
+
+            if (double.TryParse(c[index], style, CultureInfo.InvariantCulture, out valor))
                 return valor;
 
             return null;
@@ -882,14 +1249,381 @@ namespace AddOnConectorSIRE.Modules.Compras
             if (index >= c.Length) return string.Empty;
             if (string.IsNullOrWhiteSpace(c[index])) return string.Empty;
 
+            DateTime fecha;
+
             return DateTime.TryParseExact(
                 c[index],
                 "dd/MM/yyyy",
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.None,
-                out DateTime fecha)
+                out fecha)
                 ? fecha.ToString("yyyyMMdd")
                 : string.Empty;
+        }
+
+        public static void ReemplazarPropuesta(ItemEvent pVal, Form oForm, out bool BubbleEvent)
+        {
+            BubbleEvent = true;
+            try
+            {
+                if (oForm.Mode != BoFormMode.fm_OK_MODE) throw new Exception("Para enviar el reemplazo no debe haber nada por actualizar en el formulario");
+
+                int envioSire = Globals.SBO_Application.MessageBox("Se enviará el reemplazo de la propuesta a Sunat ¿Desea continuar?", 1, "&Si", "&No");
+                if (envioSire != 1) return;
+
+                SAPbouiCOM.DBDataSource oDataSource = oForm.DataSources.DBDataSources.Item("@EXX_SIRE_COMP");
+                SAPbouiCOM.DBDataSource oDataSource1 = oForm.DataSources.DBDataSources.Item("@EXX_SIRE_COMP1");
+
+                List<EXXSIRECOMP1> list = new List<EXXSIRECOMP1>();
+
+                for (int i = 0; i < oDataSource1.Size; i++)
+                {
+                    list.Add(new EXXSIRECOMP1
+                    {
+                        UEXXORIGEN = Convert.ToInt32(oDataSource1.GetValue("U_EXX_ORIGEN", i)),
+
+                        UEXXRUC = oDataSource1.GetValue("U_EXX_RUC", i),
+                        UEXXRAZSOC = oDataSource1.GetValue("U_EXX_RAZSOC", i),
+                        UEXXPERIODO = oDataSource1.GetValue("U_EXX_PERIODO", i),
+                        UEXXCARSUN = oDataSource1.GetValue("U_EXX_CARSUN", i),
+                        UEXXFEMI = oDataSource1.GetValue("U_EXX_FEMI", i),
+                        UEXXFVCTO = oDataSource1.GetValue("U_EXX_FVCTO", i),
+                        UEXXTIPDOC = oDataSource1.GetValue("U_EXX_TIPDOC", i),
+                        UEXXSERIE = oDataSource1.GetValue("U_EXX_SERIE", i),
+                        UEXXANIO = oDataSource1.GetValue("U_EXX_ANIO", i),
+
+                        UEXXNROINI = oDataSource1.GetValue("U_EXX_NROINI", i),
+                        UEXXNROFIN = oDataSource1.GetValue("U_EXX_NROFIN", i),
+                        UEXXTIPIDE = oDataSource1.GetValue("U_EXX_TIPIDE", i),
+                        UEXXNUMIDE = oDataSource1.GetValue("U_EXX_NUMIDE", i),
+                        UEXXRAZCLI = oDataSource1.GetValue("U_EXX_RAZCLI", i),
+
+                        UEXXBIGDG = Convert.ToDouble(oDataSource1.GetValue("U_EXX_BIGDG", i)),
+                        UEXXIGVDG = Convert.ToDouble(oDataSource1.GetValue("U_EXX_IGVDG", i)),
+                        UEXXBIGDGN = Convert.ToDouble(oDataSource1.GetValue("U_EXX_BIGDGN", i)),
+                        UEXXIGVDGN = Convert.ToDouble(oDataSource1.GetValue("U_EXX_IGVDGN", i)),
+                        UEXXBIDNG = Convert.ToDouble(oDataSource1.GetValue("U_EXX_BIDNG", i)),
+                        UEXXIGVDNG = Convert.ToDouble(oDataSource1.GetValue("U_EXX_IGVDNG", i)),
+                        UEXXVALNG = Convert.ToDouble(oDataSource1.GetValue("U_EXX_VALNG", i)),
+                        UEXXISC = Convert.ToDouble(oDataSource1.GetValue("U_EXX_ISC", i)),
+                        UEXXICBPER = Convert.ToDouble(oDataSource1.GetValue("U_EXX_ICBPER", i)),
+                        UEXXOTRTRI = Convert.ToDouble(oDataSource1.GetValue("U_EXX_OTRTRI", i)),
+                        UEXXTOTAL = Convert.ToDouble(oDataSource1.GetValue("U_EXX_TOTAL", i)),
+
+                        UEXXMONEDA = oDataSource1.GetValue("U_EXX_MONEDA", i),
+
+                        UEXXTCAMBIO = string.IsNullOrEmpty(oDataSource1.GetValue("U_EXX_TCAMBIO", i).ToString()) ? "" : Convert.ToDouble(oDataSource1.GetValue("U_EXX_TCAMBIO", i)) == 0 ? "" : Convert.ToDouble(oDataSource1.GetValue("U_EXX_TCAMBIO", i)).ToString("0.000"),
+
+                        UEXXFEMOD = oDataSource1.GetValue("U_EXX_FEMOD", i),
+                        UEXXTIPMOD = oDataSource1.GetValue("U_EXX_TIPMOD", i),
+                        UEXXSERMOD = oDataSource1.GetValue("U_EXX_SERMOD", i),
+                        UEXXCODDAM = oDataSource1.GetValue("U_EXX_CODDAM", i),
+                        UEXXNUMMOD = oDataSource1.GetValue("U_EXX_NUMMOD", i),
+                        UEXXCLASIF = oDataSource1.GetValue("U_EXX_CLASIF", i),
+                        UEXXIDPROY = oDataSource1.GetValue("U_EXX_IDPROY", i),
+
+                        UEXXPORPAR = Convert.ToDouble(oDataSource1.GetValue("U_EXX_PORPAR", i)),
+                        UEXXIMB = Convert.ToDouble(oDataSource1.GetValue("U_EXX_IMB", i)),
+
+                        UEXXCARORI = oDataSource1.GetValue("U_EXX_CARORI", i),
+
+                        UEXXDETRA = Convert.ToDouble(oDataSource1.GetValue("U_EXX_DETRA", i)),
+
+                        UEXXTIPNOT = oDataSource1.GetValue("U_EXX_TIPNOT", i),
+                        UEXXESTCOM = oDataSource1.GetValue("U_EXX_ESTCOM", i),
+                        UEXXINCAL = oDataSource1.GetValue("U_EXX_INCAL", i),
+
+                        UEXXCLU1 = oDataSource1.GetValue("U_EXX_CLU1", i)
+                    });
+                }
+
+                string ticket = EnviarReemplazo(oForm, list);
+                ticket += "-" + EnviarNoDomiciliado(oForm);
+                ActualizarUDO(oDataSource, ticket);
+
+                if (Globals.SBO_Application.Menus.Item("1304").Enabled)
+                    Globals.SBO_Application.Menus.Item("1304").Activate();
+
+                Globals.SuccessMessage("Envío de reemplazo se completó correctamente!");
+                Globals.MessageBox("Envío de reemplazo se completó correctamente!");
+            }
+            catch (Exception ex)
+            {
+                BubbleEvent = false;
+                throw ex;
+            }
+            finally
+            {
+                GC.Collect();
+                oForm.Freeze(false);
+            }
+        }
+
+        public static string EnviarReemplazo(Form oForm, List<EXXSIRECOMP1> list)
+        {
+            try
+            {
+                SAPbouiCOM.ComboBox oPeriodo = (SAPbouiCOM.ComboBox)oForm.Items.Item("PERIODO").Specific;
+                SAPbouiCOM.ComboBox oEmpresa = (SAPbouiCOM.ComboBox)oForm.Items.Item("BPLID").Specific;
+                string periodo = oPeriodo.Selected.Value.Replace("-", "");
+                string FechaIni = Convert.ToDateTime(oPeriodo.Selected.Value + "-01").ToString("yyyy-MM-dd");
+                string FechaFin = Convert.ToDateTime(oPeriodo.Selected.Value + "-01").AddMonths(1).AddDays(-1).ToString("yyyy-MM-dd");
+                var empresa = Globals.CONF.APIS.Where(x => x.Code == oEmpresa.Value).ToList();
+
+                string resultado = string.Join(Environment.NewLine,
+                list.Where(x => x.UEXXORIGEN != 3).Select(x => string.Join("|", new string[]
+                {
+                x.UEXXRUC ?? "",
+                x.UEXXRAZSOC ?? "",
+                x.UEXXPERIODO ?? "",
+                "", //x.UEXXCARSUN ?? "",
+                Globals.FormatearFecha(x.UEXXFEMI),
+                Globals.FormatearFecha(x.UEXXFVCTO),
+                x.UEXXTIPDOC ?? "",
+                x.UEXXSERIE ?? "",
+                x.UEXXANIO ?? "",
+                x.UEXXNROINI ?? "",
+                x.UEXXNROFIN ?? "",
+                x.UEXXTIPIDE ?? "",
+                x.UEXXNUMIDE ?? "",
+                x.UEXXRAZCLI ?? "",
+
+                (x.UEXXBIGDG ?? 0).ToString("0.00"),
+                (x.UEXXIGVDG ?? 0).ToString("0.00"),
+                (x.UEXXBIGDGN ?? 0).ToString("0.00"),
+                (x.UEXXIGVDGN ?? 0).ToString("0.00"),
+                (x.UEXXBIDNG ?? 0).ToString("0.00"),
+                (x.UEXXIGVDNG ?? 0).ToString("0.00"),
+                (x.UEXXVALNG ?? 0).ToString("0.00"),
+                (x.UEXXISC ?? 0).ToString("0.00"),
+                (x.UEXXICBPER ?? 0).ToString("0.00"),
+                (x.UEXXOTRTRI ?? 0).ToString("0.00"),
+                (x.UEXXTOTAL ?? 0).ToString("0.00"),
+
+                x.UEXXMONEDA ?? "",
+                x.UEXXTCAMBIO ?? "",
+
+                Globals.FormatearFecha(x.UEXXFEMOD),
+                x.UEXXTIPMOD ?? "",
+                x.UEXXSERMOD ?? "",
+                x.UEXXCODDAM ?? "",
+                x.UEXXNUMMOD ?? "",
+                x.UEXXCLASIF ?? "",
+                x.UEXXIDPROY ?? "",
+                (x.UEXXPORPAR ?? 0).ToString("0.00"),
+                (x.UEXXIMB ?? 0).ToString("0.00"),
+                "", //x.UEXXCARORI ?? "",
+                "" //(x.UEXXDETRA ?? 0).ToString("0.00")
+                })));
+
+                string fileName = $"LE{empresa[0].UEXXRUC}{oPeriodo.Value.Replace("-", "")}00080400021112";
+                //string fileName = $"{empresa[0].UEXXRUC}{Globals.LibroCompra}{oPeriodo.Value.Replace("-", "")}1"; 
+                string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                string folderPath = Path.Combine(documentsPath, Globals.AddOnName, Globals.oCompany.CompanyDB, "REEMPLAZAR", "COMPRAS");
+                string txtPath = Path.Combine(folderPath, $"{fileName}.txt");
+                string zipPath = Path.Combine(folderPath, $"{fileName}.zip");
+
+                if (!Directory.Exists(folderPath))
+                    Directory.CreateDirectory(folderPath);
+
+                File.WriteAllText(txtPath, resultado, Encoding.UTF8);
+                using (FileStream zipToOpen = new FileStream(zipPath, FileMode.Create))
+                {
+                    using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Create))
+                    {
+                        archive.CreateEntryFromFile(
+                            txtPath,
+                            Path.GetFileName(txtPath)
+                        );
+                    }
+                }
+
+                if (File.Exists(txtPath))
+                    File.Delete(txtPath);
+
+                string uri = $"/v1/contribuyente/migeigv/libros/rvierce/receptorpropuesta/web/propuesta/upload";
+                string propuesta = SIREAPI.EnviarDocumento(oEmpresa.Selected.Value.ToString(), zipPath, oPeriodo.Value.Replace("-", ""), Globals.LibroCompra, Globals.ProcesoCompra, uri);
+
+                if (string.IsNullOrEmpty(propuesta)) throw new Exception("Ocurrió un error al subir el reemplazo de la propuesta de compras en SIRE.");
+                return propuesta;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static string EnviarNoDomiciliado(Form oForm)
+        {
+            try
+            {
+                SAPbouiCOM.ComboBox oPeriodo = (SAPbouiCOM.ComboBox)oForm.Items.Item("PERIODO").Specific;
+                SAPbouiCOM.ComboBox oEmpresa = (SAPbouiCOM.ComboBox)oForm.Items.Item("BPLID").Specific;
+                string periodo = oPeriodo.Selected.Value.Replace("-", "");
+                string FechaIni = Convert.ToDateTime(oPeriodo.Selected.Value + "-01").ToString("yyyy-MM-dd");
+                string FechaFin = Convert.ToDateTime(oPeriodo.Selected.Value + "-01").AddMonths(1).AddDays(-1).ToString("yyyy-MM-dd");
+                var empresa = Globals.CONF.APIS.Where(x => x.Code == oEmpresa.Value).ToList();
+
+                string resultado = string.Empty;
+                if (Globals.IsHana())
+                    Globals.Query = $"CALL \"SBO_EXX_LE_0805_REGISTRODECOMPRAS_SIRE\"('{FechaIni.Replace("-", "")}', '{FechaFin.Replace("-", "")}', 'N', '{oEmpresa.Selected.Value}')";
+                else
+                    Globals.Query = $"EXEC \"SBO_EXX_LE_0805_REGISTRODECOMPRAS_SIRE\" '{FechaIni.Replace("-", "")}', '{FechaFin.Replace("-", "")}', 'N', '{oEmpresa.Selected.Value}'";
+
+                Globals.RunQuery(Globals.Query);
+                Globals.oRec.MoveFirst();
+
+                if (Globals.oRec.RecordCount > 0)
+                {
+                    while (!Globals.oRec.EoF)
+                    {
+                        resultado += Globals.oRec.Fields.Item("BPE_Periodo").Value?.ToString() + "|";
+                        resultado += "|";
+                        resultado += Globals.oRec.Fields.Item("BPE_FechaEmision").Value?.ToString() + "|";
+                        resultado += Globals.oRec.Fields.Item("Indicator").Value?.ToString() + "|";
+                        resultado += Globals.oRec.Fields.Item("Serie").Value?.ToString() + "|";
+                        resultado += Globals.oRec.Fields.Item("Correlativo").Value?.ToString() + "|";
+                        resultado += Globals.oRec.Fields.Item("NoGravada").Value?.ToString() + "|";
+                        resultado += Convert.ToDouble(Globals.oRec.Fields.Item("Otro").Value?.ToString()).ToString("0.00") + "|";
+                        resultado += Globals.oRec.Fields.Item("DocTotal").Value?.ToString() + "|";
+                        resultado += Globals.oRec.Fields.Item("TipoDocFiscal").Value?.ToString() + "|";
+                        resultado += Globals.oRec.Fields.Item("SerieDocFiscal").Value?.ToString() + "|";
+                        resultado += Globals.oRec.Fields.Item("BPE_AnoDAM").Value?.ToString() + "|";
+                        resultado += Globals.oRec.Fields.Item("CorrelativoDocFiscal").Value?.ToString() + "|";
+                        resultado += Convert.ToDouble(Globals.oRec.Fields.Item("RetencionIGV").Value?.ToString()).ToString("0.00") + "|";
+                        resultado += Globals.oRec.Fields.Item("Moneda").Value?.ToString() + "|";
+                        resultado += string.IsNullOrEmpty(Globals.oRec.Fields.Item("TC").Value?.ToString()) ? "" : Convert.ToDouble(Globals.oRec.Fields.Item("TC").Value?.ToString()) == 0 ? "" : Convert.ToDouble(Globals.oRec.Fields.Item("TC").Value?.ToString()).ToString("0.000") + "|";
+                        resultado += Globals.oRec.Fields.Item("Pais").Value?.ToString() + "|";
+                        resultado += Globals.oRec.Fields.Item("NombreBeneficiario").Value?.ToString() + "|";
+                        resultado += Globals.oRec.Fields.Item("Direccion").Value?.ToString() + "|";
+                        resultado += Globals.oRec.Fields.Item("RUC").Value?.ToString() + "|";
+                        resultado += Globals.oRec.Fields.Item("U_EXX_BENEFE").Value?.ToString() + "|";
+                        resultado += Globals.oRec.Fields.Item("U_EXX_NOMBENEFE").Value?.ToString() + "|";
+                        resultado += Globals.oRec.Fields.Item("CodPaisBeneficiario").Value?.ToString() + "|";
+                        resultado += Globals.oRec.Fields.Item("U_EXX_TIPVINECO").Value?.ToString() + "|";
+                        resultado += Convert.ToDouble(Globals.oRec.Fields.Item("U_EXX_RENBRU").Value?.ToString()).ToString("0.00") + "|";
+                        resultado += Convert.ToDouble(Globals.oRec.Fields.Item("U_EXX_DEDENACAP").Value?.ToString()).ToString("0.00") + "|";
+                        resultado += Convert.ToDouble(Globals.oRec.Fields.Item("U_EXX_RENNET").Value?.ToString()).ToString("0.00") + "|";
+                        resultado += Convert.ToDouble(Globals.oRec.Fields.Item("U_EXX_TASRET").Value?.ToString()).ToString("0.00") + "|";
+                        resultado += Convert.ToDouble(Globals.oRec.Fields.Item("U_EXX_IMPRET").Value?.ToString()).ToString("0.00") + "|";
+                        resultado += Globals.oRec.Fields.Item("U_EXX_CONVENIO").Value?.ToString() + "|";
+                        resultado += Globals.oRec.Fields.Item("U_EXX_EXOOPENDOM").Value?.ToString() + "|";
+                        resultado += Globals.oRec.Fields.Item("U_EXX_TIPREN").Value?.ToString() + "|";
+                        resultado += Globals.oRec.Fields.Item("U_EXX_MODSEREXT").Value?.ToString() + "|";
+                        resultado += Globals.oRec.Fields.Item("U_EXX_AP76IR").Value?.ToString() + "|";
+                        resultado += "|";
+                        resultado += "" + Environment.NewLine;
+                        Globals.oRec.MoveNext();
+                    }
+                }
+
+                string fileName = $"LE{empresa[0].UEXXRUC}{oPeriodo.Value.Replace("-", "")}00080500021112";
+                string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                string folderPath = Path.Combine(documentsPath, Globals.AddOnName, Globals.oCompany.CompanyDB, "REEMPLAZAR", "COMPRASND");
+                string txtPath = Path.Combine(folderPath, $"{fileName}.txt");
+                string zipPath = Path.Combine(folderPath, $"{fileName}.zip");
+
+                if (!Directory.Exists(folderPath))
+                    Directory.CreateDirectory(folderPath);
+
+                File.WriteAllText(txtPath, resultado, Encoding.UTF8);
+                using (FileStream zipToOpen = new FileStream(zipPath, FileMode.Create))
+                {
+                    using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Create))
+                    {
+                        archive.CreateEntryFromFile(
+                            txtPath,
+                            Path.GetFileName(txtPath)
+                        );
+                    }
+                }
+
+                if (File.Exists(txtPath))
+                    File.Delete(txtPath);
+
+                string uri = $"/v1/contribuyente/migeigv/libros/rvierce/receptorpreliminar/web/preliminar/upload";
+                string propuesta = SIREAPI.EnviarDocumento(oEmpresa.Selected.Value.ToString(), zipPath, oPeriodo.Value.Replace("-", ""), Globals.LibroNoDom, Globals.ProcesoNoDom, uri);
+
+                if (string.IsNullOrEmpty(propuesta)) throw new Exception("Ocurrió un error al subir de no domiciliados en SIRE.");
+                return propuesta;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void ActualizarUDO(DBDataSource oDataSource, string Ticket)
+        {
+            SAPbobsCOM.CompanyService oCS = null;
+            SAPbobsCOM.GeneralService oGS = null;
+            SAPbobsCOM.GeneralData oGD = null;
+            SAPbobsCOM.GeneralDataParams oGDP = null;
+            try
+            {
+                string DocEntry = oDataSource.GetValue("DocEntry", 0);
+                oCS = Globals.oCompany.GetCompanyService();
+                oGS = oCS.GetGeneralService("EXX_SIRE_COMP");
+
+                oGDP = (SAPbobsCOM.GeneralDataParams)oGS.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralDataParams);
+                oGDP.SetProperty("DocEntry", DocEntry);
+                oGD = oGS.GetByParams(oGDP);
+                oGD.SetProperty("U_EXX_ESTADO", "1");
+                oGD.SetProperty("U_EXX_TICKET", Ticket);
+                oGS.Update(oGD);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                Globals.Release(oCS);
+                Globals.Release(oGS);
+                Globals.Release(oGDP);
+            }
+        }
+
+        public static void ConsultaTicket(ItemEvent pVal, Form oForm, out bool BubbleEvent)
+        {
+            BubbleEvent = true;
+            try
+            {
+                SAPbouiCOM.EditText oTicket = (SAPbouiCOM.EditText)oForm.Items.Item("TICKET").Specific;
+                SAPbouiCOM.ComboBox oPeriodo = (SAPbouiCOM.ComboBox)oForm.Items.Item("PERIODO").Specific;
+                SAPbouiCOM.ComboBox oEmpresa = (SAPbouiCOM.ComboBox)oForm.Items.Item("BPLID").Specific;
+                string periodo = oPeriodo.Selected.Value.Replace("-", "");
+                string FechaIni = Convert.ToDateTime(oPeriodo.Selected.Value + "-01").ToString("yyyy-MM-dd");
+                string FechaFin = Convert.ToDateTime(oPeriodo.Selected.Value + "-01").AddMonths(1).AddDays(-1).ToString("yyyy-MM-dd");
+                var tickets = oTicket.Value.Split('-').ToList();
+                string mensaje = $"{Globals.AddOnName}\n";
+
+                foreach (string numero in tickets)
+                {
+                    string uri = $"/v1/contribuyente/migeigv/libros/rvierce/gestionprocesosmasivos/web/masivo/consultaestadotickets?perIni={periodo}&perFin={periodo}&page=1&perPage=20&numTicket={numero}";
+                    var ticket = SIREAPI.ConsultarDocumento<Ticket>(oEmpresa.Selected.Value.ToString(), uri);
+
+                    if (ticket.Registros != null && ticket.Registros.Count > 0 && ticket.Registros[0].DetalleTicket != null)
+                    {
+                        mensaje += $"Proceso: {ticket.Registros[0].DesProceso}\n" +
+                                    $"Estado: {ticket.Registros[0].DesEstadoProceso}\n" +
+                                    $"Archivo: {ticket.Registros[0].NomArchivoImportacion}\n" +
+                                    $"Fecha y Hora carga: {Convert.ToDateTime(ticket.Registros[0].DetalleTicket.FecCargaImportacion).ToString("dd/MM/yyyy")} {ticket.Registros[0].DetalleTicket.HoraCargaImportacion}\n" +
+                                    $"Filas Informadas: {ticket.Registros[0].DetalleTicket.CntCPInformados}\n" +
+                                    $"Filas Validadas: {ticket.Registros[0].DetalleTicket.CntFilasValidada}\n" +
+                                    $"Filas con Error: {ticket.Registros[0].DetalleTicket.CntCPError}\n" +
+                                    $"---------------------------------\n";
+                    }
+                    else
+                        throw new Exception("No se logró obtener información del ticket");
+                }
+                Globals.MessageBox(mensaje);
+            }
+            catch (Exception ex)
+            {
+                BubbleEvent = false;
+                throw ex;
+            }
         }
 
         public static void SeleccionarFila(ItemEvent pVal, Form oForm, out bool BubbleEvent)

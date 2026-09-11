@@ -142,9 +142,81 @@ namespace AddOnConectorSIRE.Framework
         {
             try
             {
+                SAPbobsCOM.UserObjectsMD oUDO;
+                oUDO = (SAPbobsCOM.UserObjectsMD)Globals.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD);
+                if (oUDO.GetByKey(udo.Code) == false)
+                {
+                    oUDO.Code = udo.Code;
+                    oUDO.Name = udo.Name;
+                    oUDO.TableName = udo.TableName;
 
+                    if (!string.IsNullOrEmpty(udo.LogTableName))
+                        oUDO.LogTableName = udo.LogTableName;
+                    SAPbobsCOM.BoUDOObjType objType;
+                    if (Enum.TryParse(udo.ObjectType, out objType))
+                        oUDO.ObjectType = objType;
+                    else
+                        throw new Exception("ObjectType inválido");
+                    if (!string.IsNullOrEmpty(udo.FormSRF))
+                    {
+                        oUDO.FormSRF = udo.FormSRF;
+                    }
+                    
+                    oUDO.CanCancel = udo.CanCancel == "tYES" ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
+                    oUDO.CanClose = udo.CanClose == "tYES" ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
+                    oUDO.CanDelete = udo.CanDelete == "tYES" ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
+                    oUDO.CanFind = udo.CanFind == "tYES" ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
+                    oUDO.CanLog = udo.CanLog == "tYES" ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
+                    oUDO.CanYearTransfer = udo.CanYearTransfer == "tYES" ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
+                    oUDO.ManageSeries = udo.ManageSeries == "tYES" ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
+                    oUDO.CanArchive = udo.CanArchive == "tYES" ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
+                    oUDO.CanCreateDefaultForm = udo.CanCreateDefaultForm == "tYES" ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
+                    oUDO.EnableEnhancedForm = udo.EnableEnhancedForm == "tYES" ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
+                    oUDO.RebuildEnhancedForm = udo.RebuildEnhancedForm == "tYES" ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
+                    //oUDO.ApplyAuthorization = udo.ApplyAuthorization == "tYES" ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
 
-                return false;
+                    if (udo.UserObjectMD_ChildTables != null)
+                    {
+                        foreach (var child in udo.UserObjectMD_ChildTables)
+                        {
+                            oUDO.ChildTables.TableName = child.TableName;
+                            oUDO.ChildTables.Add();
+                        }
+                    }
+
+                    if (udo.UserObjectMD_FindColumns != null)
+                    {
+                        foreach (var find in udo.UserObjectMD_FindColumns)
+                        {
+                            oUDO.FindColumns.ColumnAlias = find.ColumnAlias;
+                            oUDO.FindColumns.ColumnDescription = find.ColumnDescription;
+                            oUDO.FindColumns.Add();
+                        }
+                    }
+
+                    if (udo.UserObjectMD_FormColumns != null)
+                    {
+                        foreach (var col in udo.UserObjectMD_FormColumns.OrderBy(x => x.FormColumnNumber))
+                        {
+                            oUDO.FormColumns.FormColumnAlias = col.FormColumnAlias;
+                            oUDO.FormColumns.FormColumnDescription = col.FormColumnDescription;
+                            oUDO.FormColumns.Editable = col.Editable == "tYES" ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
+                            if (col.SonNumber.HasValue)
+                                oUDO.FormColumns.SonNumber = col.SonNumber.Value;
+                            oUDO.FormColumns.Add();
+                        }
+                    }
+
+                    int ret = oUDO.Add();
+                    if (ret != 0)
+                    {
+                        int errCode;
+                        string errMsg;
+                        Globals.oCompany.GetLastError(out errCode, out errMsg);
+                        throw new Exception($"Error creando UDO: {errMsg}");
+                    }
+                }
+                return true;
             }
             catch (Exception ex)
             {
